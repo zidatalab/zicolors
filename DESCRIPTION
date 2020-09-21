@@ -1,0 +1,15 @@
+Package: zicolors
+Version: 1.1-10
+Date: 2019-07-04
+Title: Zi Grafiken und Plots im Corporate Design
+Author: Dr. Lars E. Kroll <lkroll@zi.de>
+Maintainer: Dr. Lars E. Kroll <lkroll@zi.de>
+Description: Zi Grafiken und Plots im Corporate Design
+Depends:
+    R (>= 3.6),
+    ggplot2,
+    devtools
+License: MIT + file LICENSE
+URL: www.zi.de
+VignetteBuilder: knitr
+RoxygenNote: 6.1.1
