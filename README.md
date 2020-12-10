@@ -9,3 +9,7 @@ Using package devtools it's really simple:
 ```R
 devtools::install_github("zidatalab/zicolors")
 ```
+
+# More Info
+
+See the [package vignette](vignettes/zicolors-vignette.html)
