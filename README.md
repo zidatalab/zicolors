@@ -12,4 +12,4 @@ devtools::install_github("zidatalab/zicolors")
 
 # More Info
 
-See the [package vignette](vignettes/zicolors-vignette.html)
+See the [package vignette](https://www.zidatasciencelab.de/zicolors/vignettes/zicolors-vignette.html)
