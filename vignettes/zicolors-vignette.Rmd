@@ -40,8 +40,12 @@ library("knitr")
 library("kableExtra")
 library("ggrepel")
 library("stringr")
-devtools::install_github("zidatalab/zicolors", force=TRUE)
 ```
+```{r echo=TRUE, eval=FALSE}
+# Installation des Codes von github
+devtools::install_github("zidatalab/zicolors")
+```
+
 
 # Einbindung des Stiles
 
@@ -170,7 +174,7 @@ Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>%
   ggplot(., aes(x=Jahr,y=Patienten, fill=ifelse(.$Jahr==2013,"blau","grau"))) + 
   geom_bar(stat="identity") + 
   theme_zi_titels() + scale_fill_zi("bluegrey") +
-  labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr") + 
+  labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr", fill="") + 
   geom_hline(yintercept = 0, size=0.75) 
 ```
 
@@ -181,7 +185,7 @@ Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>%
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
   ggplot(., aes(x=Jahr,y=Patienten, fill=ifelse(.$Jahr==2013,"blau","grau"))) + 
   geom_bar(stat="identity") + 
-  theme_zi_titels_horizontalal() + scale_fill_zi("bluegrey") +
+  theme_zi_titels() + scale_fill_zi("bluegrey") +
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr") + 
   geom_hline(yintercept = 0, size=0.75) +
   coord_flip()
@@ -193,45 +197,37 @@ Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>%
 Für die Darstellung von Zeitreihen bietet sich generell eher ein Liniendiagramm an. Generell ist auch hier zu beachten, dass die Eingängigkeit der Darstellung profitiert, wenn die Legende in den Plot integriert wird. 
 
 ```{r , fig.height = 4.5, fig.width = 7 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
-Darmkrebsvorsorge_Patienten %>% 
+plotdata <- Darmkrebsvorsorge_Patienten %>% 
   mutate(Geschlecht=as.character(Geschlecht)) %>% 
   filter(Geschlecht %in% c("männlich","weiblich")) %>%
-  group_by(Geschlecht,Jahr) %>% summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>%
-  ggplot(., aes(x=Jahr,y=Patienten, color=Geschlecht, group=Geschlecht)) + 
+  group_by(Geschlecht,Jahr) %>% summarise(Patienten=sum(Patienten, na.rm=T)/1000)
+
+  ggplot(plotdata, aes(x=Jahr,y=Patienten, color=Geschlecht, group=Geschlecht)) + 
   geom_line(size=2) +  
   geom_point(shape = 21,size=3,fill="White",stroke=2) + 
   theme_zi() + 
   labs(title="Patienten mit Früherkennungskoloskopie", subtitle="Anzahl in 1000") + 
   scale_color_zi("main2colors") + scale_y_continuous(breaks=seq(100,300,50), 
-                                                              limits=c(100,300)) +
-  geom_label(data=. %>% filter(Jahr==max(Jahr)) , aes(label = Geschlecht), 
-             label.size = NA, vjust=-.5,
-             family="Calibri", 
-             size = 4)
+                                                              limits=c(100,300)) 
 ```
 
 
 Um Teilgruppen zu vergleichen, sollte generell die Funktion facets genutzt werden. Die Textgröße wurde zudem mit der Option `fontsize=11` verkleinert. Die Labels wurden im Plot mit dem Paket `ggrepel` gesetzt, um eine Überschneidung mit den Daten zu verhindern.
 
 ```{r , fig.height = 5.5, fig.width = 7 , fig.align ="left" , echo=TRUE, message=FALSE, warning=FALSE}
-Darmkrebsvorsorge_Patienten %>% 
+plotdata <- Darmkrebsvorsorge_Patienten %>% 
   mutate(Geschlecht=as.character(Geschlecht),
          Alter = as.character(Alter)) %>% 
   filter(Geschlecht %in% c("männlich","weiblich")) %>%
   filter(Alter %in% c("40 bis 59 Jahre","60 bis 79 Jahre")) %>%
-  group_by(Geschlecht,Alter,Jahr) %>% summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>%
-  ggplot(., aes(x=Jahr,y=Patienten, color=Geschlecht, group=Geschlecht)) + 
+  group_by(Geschlecht,Alter,Jahr) %>% summarise(Patienten=sum(Patienten, na.rm=T)/1000) 
+
+ggplot(plotdata, aes(x=Jahr,y=Patienten, color=Geschlecht, group=Geschlecht)) + 
   geom_line(size=2) + 
   facet_grid(Alter~. ) + # , scales = "free_y"
   geom_point(shape = 21,size=3,fill="White",stroke=2) + 
   theme_zi(fontsize = 11) + 
-  labs(title="Patienten mit Früherkennungskoloskopie", subtitle="Anzahl in 1000") + 
-  scale_color_zi("main2colors") +
-  geom_label_repel(data=. %>% filter(Jahr==max(Jahr)) , aes(label = Geschlecht), 
-             label.size = NA, vjust=0.4, fill=NA,
-             family="Calibri", 
-             size = 4) +
-  theme(panel.spacing = unit(2, "lines"))
+  scale_color_zi("main2colors") 
 ```
 
 ### Kaplan-Meier-Plots (Survivalanalyse)
@@ -249,18 +245,9 @@ my_fit <- survfit(my_surv ~ rx, conf.type="log-log", data=ovarian) # create a su
 
 ggsp <- ggsurvplot(my_fit, censor.shape="I")
 ggsp_data <- ggsp$plot$data # we need to extract the data from the ggsurvplot-object
-ggsp_zi <- ggsurvplot(my_fit, censor.shape="I", size=2)$plot + theme_zi_titels() + 
-  theme(panel.grid.major.x = element_line(size=0.1, color="#cbcbcb"),
-        panel.grid.major.y = element_line(size=0.1, color="#cbcbcb")) + # display vertical lines since time points between curves are not aligned
-  scale_color_zi() + # use zi color scheme
-  scale_y_continuous(labels = scales::percent) + # display percent instead of 0-1-probability
-  labs(title="Ovarian cancer survival analysis", subtitle="Treatment groups rx=1 and rx=2", x="Time (in days)") +
-  geom_label_repel(data = . %>% filter(time %in% aggregate(time~strata, data=ggsp_data, max)$time),
-             aes(label = strata, color=strata), 
-             label.size = NA, vjust=-0.5, fill=NA,
-             family="Calibri", segment.color = NA,
-             size = 4) # this adds the grouping at the endpoints of lines
-ggsp_zi
+
+ggplot(ggsp_data) + aes(x=time,color=ifelse(strata=="rx=1","Gruppe 1", "Gruppe 2"),y=surv*100) + geom_step(size=2) + scale_color_zi() + theme_zi() + scale_y_continuous(breaks=seq(0,100,10),limits=c(0,100)) + labs(color="",title="Überlebensanalyse",subtitle="Überlebensrate in %") + theme(legend.position = "bottom" )
+
 ```
 
 
@@ -269,21 +256,16 @@ ggsp_zi
 Um Veränderungen zu visualisieren bieten sich sog. dumbbell charts an. Sie zeigen für heterogene Outcomes Veränderungen zwischen zwei Zeitpunkten an. Wichtig ist bei der Konstruktion darauf zu achten, zuerst die Verbindungliene und anschließend die Punkte zu definieren. Um Labels besser lesbar zu machen, wurde der Plot mit `coord_flip()` gekippt und die Labels mit `stringr::str_trunc()` gekürzt.
 
 ```{r, fig.height = 4, fig.width = 8, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
-dumbbell_plot <- Darmkrebsvorsorge_gesamt %>% filter(Jahr %in% c(min(Jahr),max(Jahr)))  %>% filter(!is.na(Patienten)) %>%
-    ggplot(aes(x=paste(str_trunc(Beschreibung,45, "right")),
-               y=Patienten/1000000,
-               color=Jahr, 
-               group=GOP)) + 
-  geom_line(color="grey", size=3) +
-  geom_point(size=4) + 
-  theme_zi(fontsize = 11) + scale_color_zi("main2colors") + coord_flip() +
-  labs(title="Ambulante Leistungen zur Krebsfrüherkennung",
-       subtitle="Anzahl in Mio. abgerechneter Leistungen")     +
-  theme(legend.position =c(.9,.85) ,
-        )
+plotdata <- Darmkrebsvorsorge_gesamt %>% filter(Jahr %in% c(min(Jahr),max(Jahr)))  %>% filter(!is.na(Patienten))
 
-dumbbell_plot
-  
+dumbbell_plot <- ggplot(plotdata) +aes(x=str_wrap(Beschreibung,60),
+           y=Patienten/1000000,
+           color=Jahr, 
+           group=GOP) + 
+    geom_line(color="grey", size=3) +
+    geom_point(size=4) + 
+    theme_zi(fontsize = 11) + scale_color_zi("main2colors") + coord_flip()
+  dumbbell_plot
 ```
 
 ## Boxplots
@@ -305,41 +287,24 @@ ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species,color=Species)) +
 
 Mithilfe der Funktion finalise_plot kann das Zi Logo einem Plot hinzugefügt werden. 
 
-Exemplarische Syntax:
+Syntax:
 
-```{r }
-# finalise_plot(plot_name = dumbbell_plot,
-# source = "Datenbasis: Vertragsärztliche Abrechnungsdaten der KVen 2009-2017",
-# width_cm = 20,
-# height_cm =11.25,
-# save_filepath = "../data/dumbbell.jpg"
-# )
+```{r eval=FALSE, include=TRUE, echo=TRUE}
+finalise_plot(dumbbell_plot,
+ source = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017",
+ width_cm = 20,
+ height_cm =20*3/4,
+save_filepath = "dumbbell.jpg"
+ )
 ```
 
-
-# Weitere Hinweise
-
-## Standardexport
-
-Grafiken können in R je nach Bedürfnis auch ohne Zi-Logo exportiert werden. Vor dem Export sollte aber die Zielgröße für den Plot feststehen. Ggf. muss nach einem testweisen Export auch die Schriftgröße angepasst werden (`theme_zi(fontsize=10)`). 
-
-
-Da alle Angaben zur Schriftgröße in Punkten sich auf die Ausgabegröße beziehen. Zudem kann eine Zielauflösung festgelegt werden, für den Druck festgelegt werden. Hier empfehlen sich i.d.R. 300 dpi. Als Grafikformat empfiehlt sich die Speicherung als .png Datei, da hier eine verlustfreie Komprimierung zum Einsatz kommt. Sollte eine Weiterbearbeitung der Datei in einem Layout Programm (bspw. Adobe InDesign) vorgesehen sein, empfiehlt sich der Export in einem Vektor-Format wie insb. PDF.
-
-Beispiel Syntax für Standard Powerpoint Format:
-
-```{r }
-
-# ggsave(plot = dumbbell_plot + 
-#          theme_zi_titels(fontsize=14) + 
-#          theme(plot.title=element_blank(),
-#                plot.subtitle=element_blank(), 
-#                legend.position = c(.8,.05),
-#                legend.direction = "horizontal") +
-#          labs(x="",y="Anzahl in Mio"), 
-#        filename="Export_Dumbbell_PPTX.png", 
-#        width=22.2, height=12.57, units = "cm" , dpi=300)
-
+```{r include=FALSE, echo=TRUE}
+finalise_plot(dumbbell_plot,
+ source = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017",
+ width_cm = 20,
+ height_cm =20*3/4,
+save_filepath = "dumbbell.jpg"
+ )
 ```
-
+![](dumbbell.jpg){width="100%"}
 

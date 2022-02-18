@@ -4,8 +4,7 @@
 \alias{scale_fill_zi}
 \title{Zi fill scale for ggplot2 with different pallettes}
 \usage{
-scale_fill_zi(palette = "main", discrete = TRUE, reverse = FALSE,
-  ...)
+scale_fill_zi(palette = "main", discrete = TRUE, reverse = FALSE, ...)
 }
 \arguments{
 \item{Options}{include palette (Defaults to "main" zi Blue-Shades, with other options beeing "all", "qualitative")}

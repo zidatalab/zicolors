@@ -4,11 +4,15 @@
 \alias{finalise_plot}
 \title{Arrange alignment and save BBC ggplot chart}
 \usage{
-finalise_plot(plot_name, source_name,
+finalise_plot(
+  plot_name,
+  source_name,
   save_filepath = file.path(Sys.getenv("TMPDIR"), "tmp-nc.png"),
-  width_cm = 16, height_cm = 9,
+  width_cm = 16,
+  height_cm = 9,
   logo_image_path = file.path(system.file("data", package = "zicolors"),
-  "zilogo_square.png"))
+    "zilogo_square.png")
+)
 }
 \arguments{
 \item{plot_name}{The variable name of the plot you have created that you want to format and save}

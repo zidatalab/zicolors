@@ -203,9 +203,9 @@ zi_palettes <- list(
   `bluegreen`   = zi_cols("ziblue", "zigreen"),
   `greengrey`   = zi_cols("zigreen", "zigrey"),
   `bluegrey`    = zi_cols("ziblue", "zigrey"),
-  `green`    = zi_cols("zidarkgreen", "ziligthgreen"),
-  `red`    = zi_cols("zidarkred", "ziligthred"),
-  `blue`    = zi_cols("zidarkblue", "ziligthblue"),
+  `green`    = zi_cols("zidarkgreen", "zilightgreen"),
+  `red`    = zi_cols("zidarkred", "zilightred"),
+  `blue`    = zi_cols("zidarkblue", "zilightblue"),
   `greenred`    = zi_cols("zigreen", "zigrey","zired")
 )
 

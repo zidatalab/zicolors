@@ -4,8 +4,7 @@
 \alias{scale_color_zi}
 \title{Zi color scale for ggplot2 with different pallettes}
 \usage{
-scale_color_zi(palette = "main", discrete = TRUE, reverse = FALSE,
-  ...)
+scale_color_zi(palette = "main", discrete = TRUE, reverse = FALSE, ...)
 }
 \arguments{
 \item{Options}{include palette (Defaults to "main" zi Blue/Green/Orange, with other options beeing based on mostly 2 colors except of "qualitative" with 4 colors)}

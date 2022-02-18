@@ -4,7 +4,7 @@
 \alias{theme_zidatalab}
 \title{Zi Datalab Theme with grey bg axis and labels based on theme_zi() optimal suited to print maps.}
 \usage{
-theme_zidatalab(fontsize = 14)
+theme_zidatalab(fontsize = 14, font = "Calibri")
 }
 \arguments{
 \item{Define}{a base_size (Defaults to 12) and base_family for Fonts used (defaults to ggplot2's defaults)}
