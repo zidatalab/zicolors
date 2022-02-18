@@ -104,6 +104,32 @@ theme_zi_titels <- function (fontsize=14,font = "Calibri") {
 }
 
 
+#' Zi Theme with for horizontal charts 
+#'
+#' @param Define a base_size (Defaults to 12) and base_family for Fonts used (defaults to ggplot2's defaults)
+#' @keywords theme
+#' @export
+
+theme_zi_horizontal <- function (fontsize=14,font = "Calibri") {
+  theme_zi(fontsize=fontsize,font = font) +
+  theme(panel.grid.major.x =   element_line(color = "grey"),
+          panel.grid.major.y = element_blank()) 
+}
+
+
+#' Zi Titels Theme with for horizontal charts 
+#'
+#' @param Define a base_size (Defaults to 12) and base_family for Fonts used (defaults to ggplot2's defaults)
+#' @keywords theme
+#' @export
+
+theme_zi_titels_horizontal <- function (fontsize=14,font = "Calibri") {
+  theme_zi_titels(fontsize=fontsize,font = font) +
+    theme(panel.grid.major.x =   element_line(color = "grey"),
+          panel.grid.major.y = element_blank()) 
+}
+
+
 #' Zi Theme without axis and labels based on theme_zi() optimal suited to print maps.
 #'
 #' @param Define a base_size (Defaults to 12) and base_family for Fonts used (defaults to ggplot2's defaults)
