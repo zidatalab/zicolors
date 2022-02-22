@@ -28,10 +28,10 @@ library("systemfonts")
 library('ragg')
 library("textshaping")
 
-ragg_png = function(..., res = 150) {
+ragg_png = function(..., res = 300) {
   ragg::agg_png(..., res = res, units = "in")
 }
-opts_chunk$set(dev = "ragg_png")
+knitr::opts_chunk$set(dev = "ragg_png")
 
 
 ## ----echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE---------------
