@@ -49,11 +49,15 @@ devtools::install_github("zidatalab/zicolors")
 
 # Einbindung des Stiles
 
-Zur Anwendung und Installation müssen die R Pakete tidyverse, devtools und extrafonts verfügbar sein. Die weiteren Libraries sind optional.
+Zur Anwendung und Installation müssen die R Pakete tidyverse, devtools und systemfonts sowie ragg und textshaping verfügbar sein. Die weiteren Libraries sind optional.
 
 ## Libraries
 
-Hinweis: Damit die Windows-Schriftarten erkannt werden, muss extrafont einmal die lokal installierten Schriftarten importieren. Das geht mit `extrafont::font_import()` und dauert ein paar Minuten.
+Hinweis: Eventuell muss als Graphic-Backend "AGG" gesetzt werden in RStudio: Tools > Global Options > General > Graphics und Backend auf AGG setzen.
+
+Hinweis: Auf Nicht-Windows-Maschinen (z.B. Linux) müssen die Windows-Schriftarten (insbesondere Calibri und seine Varianten) installiert sein. Siehe z.B.: [Calibri und Ubuntu](https://kodejava.org/how-do-i-install-calibri-font-in-ubuntu/).
+
+Hinweis: Damit die Windows-Schriftarten (insbesondere Calibri) erkannt werden, muss das (r)agg-Device gesetzt werden.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
 # Prepare Using package and fonts
@@ -62,10 +66,10 @@ library("systemfonts")
 library('ragg')
 library("textshaping")
 
-ragg_png = function(..., res = 150) {
+ragg_png = function(..., res = 300) {
   ragg::agg_png(..., res = res, units = "in")
 }
-opts_chunk$set(dev = "ragg_png")
+knitr::opts_chunk$set(dev = "ragg_png")
 
 ```
 
