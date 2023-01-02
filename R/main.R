@@ -1,20 +1,14 @@
-# Specification of colors accorind to Corporate Design Guidelines as of 02.07.2019
-# Note: This Script is hevily inspired by the BBC Style Guide
+# Specification of colors according to Corporate Design Guidelines as of 02.07.2019
+# Note: This Script is heavily inspired by the BBC Style Guide
 
 zi_colors <- c(
-  `zidarkred`       =  rgb(156/255,5/255,136/255),
   `zired`           =  rgb(200/255,0/255,177/255),
-  `zilightred`      =  rgb(244/255,204/255,239/255),
   `zidarkblue`       =  rgb(0/255,101/255,150/255),
   `ziblue`           =  rgb(0/255,134/255,197/255),
   `zilightblue`      =  rgb(204/255,231/255,243/255),
   `zidarkgreen`      =  rgb(136/255,156/255,5/255),
   `zigreen`          =  rgb(177/255,200/255,0/255),
   `zilightgreen`     =  rgb(239/255,244/255,204/255),
-  `zidarkorange`     =  rgb(175/255,119/255,3/255),
-  `ziorange`         =  rgb(228/255,153/255,0/255),
-  `zilightorange`    =  rgb(250/255,235/255,204/255),
-  `zipurple`         =  rgb(197/255,0/255,134/255),
   `zidarkgrey`       =  rgb(88/255,88/255,90/255),
   `zigrey`           =  rgb(135/255,136/255,138/255),
   `zilightgrey`      =  rgb(217/255,218/255,219/255),
