@@ -2,19 +2,38 @@
 # Note: This Script is heavily inspired by the BBC Style Guide
 
 zi_colors <- c(
+  `zisignalrot`           = rgb(240/255,25/255,75/255),
+  `zilindgruen`           = rgb(45/255,205/255,115/255),
+  `zihimmelblau`          = rgb(60/255,155/255,250/255),
+  `ziblaugruen`           = rgb(25/255,75/255,90/255),
+  `ziblaugruenhell`       = rgb(65/255,130/255,150/255),
+  `zihimmelblauhell`      = rgb(190/255,225/255,255/255),
+  `zihimmelblaudunkel`    = rgb(50/255,105/255,200/255),
+  `zilindgruenhell`       = rgb(190/255,235/255,205/255),
+  `zilindgruendunkel`     = rgb(30/255,145/255,80/255),
+  `ziblaugrau`            = rgb(115/255,145/255,155/255),
+  `ziblaugrauhell`        = rgb(235/255,240/255,240/255)
+)
+
+zi_colors_old <- c(
+  `zidarkred`       =  rgb(156/255,5/255,136/255),
   `zired`           =  rgb(200/255,0/255,177/255),
+  `zilightred`      =  rgb(244/255,204/255,239/255),
   `zidarkblue`       =  rgb(0/255,101/255,150/255),
   `ziblue`           =  rgb(0/255,134/255,197/255),
   `zilightblue`      =  rgb(204/255,231/255,243/255),
   `zidarkgreen`      =  rgb(136/255,156/255,5/255),
   `zigreen`          =  rgb(177/255,200/255,0/255),
   `zilightgreen`     =  rgb(239/255,244/255,204/255),
+  `zidarkorange`     =  rgb(175/255,119/255,3/255),
+  `ziorange`         =  rgb(228/255,153/255,0/255),
+  `zilightorange`    =  rgb(250/255,235/255,204/255),
+  `zipurple`         =  rgb(197/255,0/255,134/255),
   `zidarkgrey`       =  rgb(88/255,88/255,90/255),
   `zigrey`           =  rgb(135/255,136/255,138/255),
   `zilightgrey`      =  rgb(217/255,218/255,219/255),
   `ziultralightgrey` =  rgb(247/255,248/255,249/255)
 )
-
 
 #' Zi Theme based on theme_grey
 #'
@@ -34,7 +53,7 @@ theme_zi <- function(fontsize=14,font = "Calibri") {
     
     # Text format:
     ## Title
-    plot.title = ggplot2::element_text(family=font, size=fontsize+4, face="bold", color="#222222"),
+    plot.title = ggplot2::element_text(family=font, size=fontsize+4, face="bold", color="#194B5A"),
     
     ## subtitle 
     plot.subtitle = ggplot2::element_text(family=font,size=fontsize+2,margin=ggplot2::margin(7,0,7,0)),
@@ -46,24 +65,24 @@ theme_zi <- function(fontsize=14,font = "Calibri") {
     legend.position = "top",
     legend.text.align = 0,
     legend.background = ggplot2::element_blank(),
-    legend.title = element_text(size=fontsize,color="#222222", face = "bold"),
+    legend.title = element_text(size=fontsize,color="#194B5A", face = "bold"),
     legend.key = ggplot2::element_blank(),
     legend.text = ggplot2::element_text(family=font,
                                         size=fontsize,
-                                        color="#222222"),
+                                        color="#194B5A"),
     
     #Axis format
     axis.title = ggplot2::element_blank(),
     axis.text = ggplot2::element_text(family=font,
                                       size=fontsize,
-                                      color="#222222"),
+                                      color="#194B5A"),
     axis.text.x = ggplot2::element_text(margin=ggplot2::margin(5, b = 10)),
     axis.ticks = ggplot2::element_blank(),
     axis.line = ggplot2::element_blank(),
     
     #Grid lines
     panel.grid.minor = ggplot2::element_blank(),
-    panel.grid.major.y = ggplot2::element_line(color="#cbcbcb"),
+    panel.grid.major.y = ggplot2::element_line(color="#ebf0f0"),
     panel.grid.major.x = ggplot2::element_blank(),
     
     #Blank background
@@ -90,8 +109,8 @@ theme_zi <- function(fontsize=14,font = "Calibri") {
 
 theme_zi_titels <- function (fontsize=14,font = "Calibri") {
   theme_zi(fontsize=fontsize,font = font) +
-    theme(axis.title = ggplot2::element_text(family=font,size=fontsize,face="bold",color="#222222"),
-          legend.title = element_text(family=font,size=fontsize,color="#222222", face = "bold"),
+    theme(axis.title = ggplot2::element_text(family=font,size=fontsize,face="bold",color="#194B5A"),
+          legend.title = element_text(family=font,size=fontsize,color="#194B5A", face = "bold"),
           legend.position = "bottom" ,
           axis.title.y = ggplot2::element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)),
           axis.title.x = ggplot2::element_text(margin = margin(t = 10, r = 0, b = 0, l = 0)))
@@ -106,7 +125,7 @@ theme_zi_titels <- function (fontsize=14,font = "Calibri") {
 
 theme_zi_horizontal <- function (fontsize=14,font = "Calibri") {
   theme_zi(fontsize=fontsize,font = font) +
-  theme(panel.grid.major.x =   element_line(color = "grey"),
+  theme(panel.grid.major.x =   element_line(color = "#ebf0f0"),
           panel.grid.major.y = element_blank()) 
 }
 
@@ -119,7 +138,7 @@ theme_zi_horizontal <- function (fontsize=14,font = "Calibri") {
 
 theme_zi_titels_horizontal <- function (fontsize=14,font = "Calibri") {
   theme_zi_titels(fontsize=fontsize,font = font) +
-    theme(panel.grid.major.x =   element_line(color = "grey"),
+    theme(panel.grid.major.x =   element_line(color = "#ebf0f0"),
           panel.grid.major.y = element_blank()) 
 }
 
@@ -143,7 +162,7 @@ theme_zi_void <- function (fontsize=14, font = "Calibri") {
           axis.line.x = element_blank(),
           axis.line.y = element_blank(),
           axis.ticks = element_blank(),
-          legend.title = element_text(size=fontsize,color="#222222", face = "bold"),
+          legend.title = element_text(size=fontsize,color="#194B5A", face = "bold"),
           legend.position = c(1.1,0.25),
           legend.direction = "vertical")
 }
@@ -160,9 +179,9 @@ theme_zi_void <- function (fontsize=14, font = "Calibri") {
 
 theme_zidatalab <- function (fontsize=14, font = "Calibri") {
   theme_zi(fontsize=fontsize,font = font) +
-    theme(panel.grid.major.y = ggplot2::element_line(color="#a1a1a1"),
-          panel.background = ggplot2::element_rect(fill="#cbcbcb"),
-          plot.background = ggplot2::element_rect(fill="#cbcbcb")
+    theme(panel.grid.major.y = ggplot2::element_line(color="#ebf0f0"),
+          panel.background = ggplot2::element_rect(fill="white"),
+          plot.background = ggplot2::element_rect(fill="white")
     )
   
 }
@@ -190,17 +209,9 @@ zi_cols <- function(...) {
 # Palette Definition
 #' @export
 zi_palettes <- list(
-  `main`        = zi_cols("ziblue", "ziorange","zigreen"),
-  `mainfliped`  = zi_cols("ziblue", "zigreen","ziorange"),
-  `main2colors` = zi_cols("ziblue", "zigreen"),
-  `main4colors` = zi_cols("ziblue","zigreen","ziorange","zired"),
-  `bluegreen`   = zi_cols("ziblue", "zigreen"),
-  `greengrey`   = zi_cols("zigreen", "zigrey"),
-  `bluegrey`    = zi_cols("ziblue", "zigrey"),
-  `green`    = zi_cols("zidarkgreen", "zilightgreen"),
-  `red`    = zi_cols("zidarkred", "zilightred"),
-  `blue`    = zi_cols("zidarkblue", "zilightblue"),
-  `greenred`    = zi_cols("zigreen", "zigrey","zired")
+  `main`        = zi_cols("zilindgruen", "zihimmelblau","ziblaugruen"),
+  `main2colors` = zi_cols("zilindgruen", "zihimmelblau"),
+  `main4colors` = zi_cols("zilindgruen", "zihimmelblau","ziblaugruen", "zisignalrot")
 )
 
 # Palette Function
