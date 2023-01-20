@@ -1,18 +1,15 @@
 Package: zicolors
 Version: 2.0
 Date: 2022-02-17
-Title: Zi Grafiken und Plots im Corporate Design
+Title: Zi-Grafiken und Plots im Corporate Design
 Author: Dr. Lars E. Kroll <lkroll@zi.de>
-Maintainer: Dr. Lars E. Kroll <lkroll@zi.de>
+Maintainer: Dr. Edgar Steiger <esteiger@zi.de>
 Description: Dieses Package erlaubt es, Grafiken und Plots im Zi-Corporate Design zu erstellen. Insbesondere Farben, Zi-Logo und Schriftart werden entsprechend angewendet.
 Depends:
     ggplot2,
-    ragg,
     magrittr,
     dplyr,
-    systemfonts,
     showtext,
-    textshaping,
     knitr
 License: MIT + file LICENSE
 URL: www.zi.de

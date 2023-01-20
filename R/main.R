@@ -37,47 +37,39 @@ zi_colors_old <- c(
 
 #' Zi Theme based on theme_grey
 #'
-#' @param Define a base_size (Defaults to 12) and base_family and bold_family for Fonts used (defaults to ggplot2's defaults)
+#' @param Define a base_size (Defaults to 10) and base_family and bold_family for Fonts used (defaults to ggplot2's defaults)
 #' @keywords theme
 #' @export
 #' @examples
 #' \dontrun{
 #' library(showtext)
-#' font_add_google(name = "Roboto", family = "Roboto")
 #' font_add_google(name = "Roboto Condensed", family = "Roboto Condensed")
 #' showtext_auto()
 #' ggplot(as.data.frame(Titanic) %>% group_by(Class) %>% summarise(n=sum(Freq)), aes(x=Class,  y=n)) + geom_bar(stat="identity" , fill=zi_cols("zihimmelblau")) +  theme_zi() 
 #' }
 
-theme_zi <- function(fontsize=14,font = "Roboto") {
+theme_zi <- function(fontsize=10, font = "Roboto Condensed") {
   
   ggplot2::theme(
     
     # Text format:
+    text = ggplot2::element_text(family=font, color="#194B5A", size=fontsize),
+    
     ## Title
-    plot.title = ggplot2::element_text(family=font, size=fontsize+4, face="bold", color="#194B5A"),
+    plot.title = ggplot2::element_text(size=fontsize*1.2, face="bold", margin=ggplot2::margin(0,0,0,0)),
     
     ## subtitle 
-    plot.subtitle = ggplot2::element_text(family=font,size=fontsize+2,margin=ggplot2::margin(7,0,7,0)),
-    plot.caption = ggplot2::element_text(family=font, size=fontsize-4),
-    #This leaves the caption text element empty, because it is set elsewhere in 
-    #the finalise plot function
-    
+    plot.subtitle = ggplot2::element_text(size=fontsize*1.2,
+                                          margin=ggplot2::margin(4,0,4,0)),
     #Legend format
-    legend.position = "top",
+    legend.position = "bottom",
+    legend.justification='left',
     legend.text.align = 0,
     legend.background = ggplot2::element_blank(),
-    legend.title = element_text(size=fontsize,color="#194B5A", face = "bold"),
     legend.key = ggplot2::element_blank(),
-    legend.text = ggplot2::element_text(family=font,
-                                        size=fontsize,
-                                        color="#194B5A"),
-    
+
     #Axis format
     axis.title = ggplot2::element_blank(),
-    axis.text = ggplot2::element_text(family=font,
-                                      size=fontsize,
-                                      color="#194B5A"),
     axis.text.x = ggplot2::element_text(margin=ggplot2::margin(5, b = 10)),
     axis.ticks = ggplot2::element_blank(),
     axis.line = ggplot2::element_blank(),
@@ -93,10 +85,12 @@ theme_zi <- function(fontsize=14,font = "Roboto") {
     panel.background = ggplot2::element_blank(),
     
     #Strip background (#This sets the panel background for facet-wrapped plots to white, 
-    #removing the standard grey ggplot background colour and sets the title size of the 
-    #facet-wrap title to font size 22)
+    #removing the standard grey ggplot background colour)
     strip.background = ggplot2::element_rect(fill="white"),
-    strip.text = ggplot2::element_text(size  = fontsize,  hjust = 0)
+    strip.text = ggplot2::element_text(hjust = 0),
+    
+    #for facet plots its useful to have more space between plots
+    panel.spacing = unit(2, "lines")
   )
 }
 
@@ -110,11 +104,9 @@ theme_zi <- function(fontsize=14,font = "Roboto") {
 #' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zi_void()
 #' }
 
-theme_zi_titels <- function (fontsize=14,font = "Roboto") {
-  theme_zi(fontsize=fontsize,font = font) +
-    theme(axis.title = ggplot2::element_text(family=font,size=fontsize,face="bold",color="#194B5A"),
-          legend.title = element_text(family=font,size=fontsize,color="#194B5A", face = "bold"),
-          legend.position = "bottom" ,
+theme_zi_axistitles <- function (fontsize=10, font = "Roboto Condensed") {
+  theme_zi(fontsize=fontsize, font = font) +
+    theme(axis.title = element_text(size=fontsize, face="bold"),
           axis.title.y = ggplot2::element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)),
           axis.title.x = ggplot2::element_text(margin = margin(t = 10, r = 0, b = 0, l = 0)))
 }
@@ -126,8 +118,8 @@ theme_zi_titels <- function (fontsize=14,font = "Roboto") {
 #' @keywords theme
 #' @export
 
-theme_zi_horizontal <- function (fontsize=14,font = "Roboto") {
-  theme_zi(fontsize=fontsize,font = font) +
+theme_zi_horizontal <- function (fontsize=10, font = "Roboto Condensed") {
+  theme_zi(fontsize=fontsize, font = font) +
   theme(panel.grid.major.x =   element_line(color = "#ebf0f0"),
           panel.grid.major.y = element_blank()) 
 }
@@ -139,8 +131,8 @@ theme_zi_horizontal <- function (fontsize=14,font = "Roboto") {
 #' @keywords theme
 #' @export
 
-theme_zi_titels_horizontal <- function (fontsize=14,font = "Roboto") {
-  theme_zi_titels(fontsize=fontsize,font = font) +
+theme_zi_axistitles_horizontal <- function (fontsize=10, font = "Roboto Condensed") {
+  theme_zi_axistitles(fontsize=fontsize, font = font) +
     theme(panel.grid.major.x =   element_line(color = "#ebf0f0"),
           panel.grid.major.y = element_blank()) 
 }
@@ -156,7 +148,7 @@ theme_zi_titels_horizontal <- function (fontsize=14,font = "Roboto") {
 #' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zi_void()
 #' }
 
-theme_zi_void <- function (fontsize=14, font = "Roboto") {
+theme_zi_void <- function (fontsize=10, font = "Roboto Condensed") {
   theme_zi(fontsize=fontsize,font = font) +
     theme(panel.grid.major.y = element_blank(),
           axis.text.x =  element_blank(),
@@ -166,7 +158,6 @@ theme_zi_void <- function (fontsize=14, font = "Roboto") {
           axis.line.x = element_blank(),
           axis.line.y = element_blank(),
           axis.ticks = element_blank(),
-          legend.title = element_text(size=fontsize,color="#194B5A", face = "bold"),
           legend.position = c(1.1,0.25),
           legend.direction = "vertical")
 }
@@ -183,8 +174,8 @@ theme_zi_void <- function (fontsize=14, font = "Roboto") {
 #' }
 
 
-theme_zidatalab <- function (fontsize=14, font = "Roboto") {
-  theme_zi(fontsize=fontsize,font = font) +
+theme_zidatalab <- function (fontsize=10, font = "Roboto Condensed") {
+  theme_zi(fontsize=fontsize, font = font) +
     theme(panel.grid.major.y = ggplot2::element_line(color="#ebf0f0"),
           panel.background = ggplot2::element_rect(fill="white"),
           plot.background = ggplot2::element_rect(fill="white")
@@ -193,17 +184,8 @@ theme_zidatalab <- function (fontsize=14, font = "Roboto") {
 }
 
 
-#' Zi Theme without axis and labels based on theme_zi() optimal suited to print maps.
-#'
-#' @param Define a base_size (Defaults to 12) and base_family for Fonts used (defaults to ggplot2's defaults)
-#' @keywords theme
-#' @export
-#' @examples
-#' \dontrun{
-#' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zi_void()
-#' }
-
 # Function to access colors by Names
+#' @export
 zi_cols <- function(...) {
   cols <- c(...)
   
@@ -216,10 +198,11 @@ zi_cols <- function(...) {
 # Palette Definition
 #' @export
 zi_palettes <- list(
-  `main`        = zi_cols("zilindgruen", "zihimmelblau","ziblaugruen"),
-  `main2colors` = zi_cols("zilindgruen", "zihimmelblau"),
-  `main4colors` = zi_cols("zilindgruen", "zihimmelblau","ziblaugruen", "zisignalrot"),
-  `bluegrey`    = zi_cols("zihimmelblau", "ziblaugrau")
+  `main`        = zi_cols("zihimmelblau", "zilindgruen"),
+  `main3colors` = zi_cols("zihimmelblau", "zilindgruen", "ziblaugruen"),
+  `main4colors` = zi_cols("zihimmelblau", "zilindgruen", "ziblaugruen", "zisignalrot"),
+  `bluegrey`    = zi_cols("zihimmelblau", "ziblaugrau"),
+  `divergent`   = zi_cols("zihimmelblau", "ziblaugrauhell", "zilindgruen")
 )
 
 # Palette Function
@@ -291,7 +274,7 @@ left_align <- function(plot_name, pieces){
 create_footer <- function (source_name, logo_image_path) {
   #Make the footer
   footer <- grid::grobTree(grid::textGrob(source_name,
-                                          x = 0.09, hjust = 0, gp = grid::gpar(fontsize=8, fontfamily="Roboto")), # edgar: added fontfamily Roboto
+                                          x = 0.09, hjust = 0, gp = grid::gpar(fontsize=10, fontfamily="Roboto Condensed")), # edgar: added fontfamily Roboto
                            grid::rasterGrob(png::readPNG(logo_image_path), x = 0.04))
   return(footer)
   

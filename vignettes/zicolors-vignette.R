@@ -24,14 +24,11 @@ library("stringr")
 ## ----echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE---------------
 # Prepare Using package and fonts
 library("zicolors")
-library("systemfonts")
-library('ragg')
-library("textshaping")
+library("showtext")
 
-ragg_png = function(..., res = 300) {
-  ragg::agg_png(..., res = res, units = "in")
-}
-knitr::opts_chunk$set(dev = "ragg_png")
+font_add_google(name = "Roboto Condensed", family = "Roboto Condensed")
+
+showtext_auto()
 
 
 ## ----echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE---------------
@@ -39,17 +36,17 @@ Darmkrebsvorsorge_gesamt <-
   readxl::read_excel("../data/Darmkrebsvorsorge Anzahl Patienten.xlsx",     
                      sheet = "GOP 01730-01748") %>% gather(Jahr,Patienten,3:dim(.)[2])
 Darmkrebsvorsorge_gesamt %>% head() %>% 
-   kable() %>%   kable_styling() %>% row_spec(0, bold = T, color = "white", background = zi_cols("zihimmelblau"))
+   kable() %>%   kable_styling() %>% row_spec(0, bold = T, color = "white", background = zi_cols("ziblaugruen"))
 
 Darmkrebsvorsorge_Patienten <- readxl::read_excel("../data/Darmkrebsvorsorge Anzahl Patienten.xlsx",     
                                                   sheet = "GOP 01741") %>%
   gather(Jahr,Patienten,3:dim(.)[2])  %>% mutate(Patienten=ifelse(Patienten=="<30",NA,as.numeric(Patienten)))
 Darmkrebsvorsorge_Patienten %>% head() %>%   kable() %>%
-  kable_styling() %>% row_spec(0, bold = T, color = "white", background = zi_cols("zihimmelblau"))
+  kable_styling() %>% row_spec(0, bold = T, color = "white", background = zi_cols("ziblaugruen"))
 
 ## ----  fig.height = 0.5, fig.width = 6, fig.align ="left",caption="Übersicht über alle Farbskalen" ,echo=TRUE, message=FALSE, warning=FALSE----
 explot <- as.data.frame(cbind("x"=seq(1:128),"y"=1)) %>%
-  ggplot(.,aes(x=x,y=y,fill=x)) + geom_bar(stat="identity",width=1, show.legend = FALSE) + 
+  ggplot(.,aes(x=x,y=y,fill=x)) + geom_bar(stat="identity", show.legend = FALSE) + 
   theme_void() 
 for (zicolorsheme in names(zicolors::zi_palettes)) {
   myplot <- explot + geom_text(aes(x=20,y=.5, label=paste(zicolorsheme)),
@@ -62,7 +59,7 @@ for (zicolorsheme in names(zicolors::zi_palettes)) {
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
   ggplot(., aes(x=Jahr,y=Patienten)) + 
-  geom_bar(stat="identity", fill=zi_cols("zihimmelblau")) + 
+  geom_bar(stat="identity", width=0.5, fill=zi_cols("zihimmelblau")) + 
   theme_zi() + 
   labs(title="Patienten mit Früherkennungskoloskopie", subtitle="Anzahl in 1000")
 
@@ -70,35 +67,35 @@ Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>%
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
   ggplot(., aes(x=Jahr,y=Patienten)) + 
-  geom_bar(stat="identity", fill=zi_cols("zihimmelblau")) + 
-  theme_zi_titels() + 
+  geom_bar(stat="identity", width=0.5, fill=zi_cols("zihimmelblau")) + 
+  theme_zi_axistitles() + 
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr")
 
 ## ---- fig.height = 4.5, fig.width = 7 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
   ggplot(., aes(x=Jahr,y=Patienten)) + 
-  geom_bar(stat="identity", fill=zi_cols("zihimmelblau")) + 
-  theme_zi_titels() + 
+  geom_bar(stat="identity", width=0.5, fill=zi_cols("zihimmelblau")) + 
+  theme_zi_axistitles() + 
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr") + 
-  geom_hline(yintercept = 0, size=0.75) 
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugrau")) 
 
 ## ---- fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE----
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
   ggplot(., aes(x=Jahr,y=Patienten, fill=ifelse(.$Jahr==2013,"blau","grau"))) + 
-  geom_bar(stat="identity") + 
-  theme_zi_titels() + scale_fill_zi("bluegrey") +
+  geom_bar(stat="identity", width=0.5) + 
+  theme_zi_axistitles() + scale_fill_zi("bluegrey") +
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr", fill="") + 
-  geom_hline(yintercept = 0, size=0.75) 
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugrau")) 
 
 ## ---- fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE----
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
   ggplot(., aes(x=Jahr,y=Patienten, fill=ifelse(.$Jahr==2013,"blau","grau"))) + 
-  geom_bar(stat="identity") + 
-  theme_zi_titels() + scale_fill_zi("bluegrey") +
-  labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr") + 
+  geom_bar(stat="identity", width=0.5) + 
+  theme_zi_axistitles_horizontal() + scale_fill_zi("bluegrey") +
+  labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr", fill="") + 
   geom_hline(yintercept = 0, size=0.75) +
   coord_flip()
 
@@ -113,7 +110,7 @@ plotdata <- Darmkrebsvorsorge_Patienten %>%
   geom_point(shape = 21,size=3,fill="White",stroke=2) + 
   theme_zi() + 
   labs(title="Patienten mit Früherkennungskoloskopie", subtitle="Anzahl in 1000") + 
-  scale_color_zi("main2colors") + scale_y_continuous(breaks=seq(100,300,50), 
+  scale_color_zi("main") + scale_y_continuous(breaks=seq(100,300,50), 
                                                               limits=c(100,300)) 
 
 ## ---- fig.height = 5.5, fig.width = 7 , fig.align ="left" , echo=TRUE, message=FALSE, warning=FALSE----
@@ -128,8 +125,8 @@ ggplot(plotdata, aes(x=Jahr,y=Patienten, color=Geschlecht, group=Geschlecht)) +
   geom_line(size=2) + 
   facet_grid(Alter~. ) + # , scales = "free_y"
   geom_point(shape = 21,size=3,fill="White",stroke=2) + 
-  theme_zi(fontsize = 11) + 
-  scale_color_zi("main2colors") 
+  theme_zi() + 
+  scale_color_zi("main") 
 
 ## ---- fig.height = 5, fig.width = 7, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
 library(survival)
@@ -155,17 +152,17 @@ dumbbell_plot <- ggplot(plotdata) +aes(x=str_wrap(Beschreibung,60),
            group=GOP) + 
     geom_line(color="grey", size=3) +
     geom_point(size=4) + 
-    theme_zi(fontsize = 11) + scale_color_zi("main2colors") + coord_flip()
+    theme_zi() + scale_color_zi("main") + coord_flip()
   dumbbell_plot
 
 ## ---- fig.height = 4, fig.width = 6, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
 data(iris)
 library(EnvStats) # to display sample sizes
-ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species,color=Species)) + 
+ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species, color=Species)) + 
   geom_boxplot(lwd=1, fatten=1.5, alpha=.8, show.legend = FALSE) + theme_zi() + 
-  scale_fill_zi() +scale_color_zi() +  
+  scale_fill_zi("main3colors") + scale_color_zi("main3colors") +  
   labs(title="Iris data: species comparison", subtitle="Sepal length in cm") + 
-  stat_n_text(y.expand.factor=0.2, size=3.5)
+  stat_n_text(y.expand.factor=0.2, size=3.5, family="Roboto Condensed", color = "#194B5A")
 
 ## ----eval=FALSE, include=TRUE, echo=TRUE--------------------------------------
 #  finalise_plot(dumbbell_plot,
@@ -178,8 +175,8 @@ ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species,color=Species)) +
 ## ----include=FALSE, echo=TRUE-------------------------------------------------
 finalise_plot(dumbbell_plot,
  source = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017",
- width_cm = 20,
- height_cm =20*3/4,
+ width_cm = 10,
+ height_cm =10*3/4,
 save_filepath = "dumbbell.jpg"
  )
 

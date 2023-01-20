@@ -2,15 +2,15 @@
 % Please edit documentation in R/main.R
 \name{scale_fill_zi}
 \alias{scale_fill_zi}
-\title{Zi fill scale for ggplot2 with different pallettes}
+\title{Zi fill scale for ggplot2 with different palettes}
 \usage{
 scale_fill_zi(palette = "main", discrete = TRUE, reverse = FALSE, ...)
 }
 \arguments{
-\item{Options}{include palette (Defaults to "main" zi Blue-Shades, with other options beeing "all", "qualitative")}
+\item{Options}{include palette (Defaults to "main" zi Blue-Shades, with other options being "all", "qualitative")}
 }
 \description{
-Zi fill scale for ggplot2 with different pallettes
+Zi fill scale for ggplot2 with different palettes
 }
 \examples{
 \dontrun{

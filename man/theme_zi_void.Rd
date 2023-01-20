@@ -4,7 +4,7 @@
 \alias{theme_zi_void}
 \title{Zi Theme without axis and labels based on theme_zi() optimal suited to print maps.}
 \usage{
-theme_zi_void(fontsize = 14, font = "Calibri")
+theme_zi_void(fontsize = 10, font = "Roboto Condensed")
 }
 \arguments{
 \item{Define}{a base_size (Defaults to 12) and base_family for Fonts used (defaults to ggplot2's defaults)}

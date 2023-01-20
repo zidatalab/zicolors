@@ -4,21 +4,20 @@
 \alias{theme_zi}
 \title{Zi Theme based on theme_grey}
 \usage{
-theme_zi(fontsize = 14, font = "Calibri")
+theme_zi(fontsize = 10, font = "Roboto Condensed")
 }
 \arguments{
-\item{Define}{a base_size (Defaults to 12) and base_family and bold_family for Fonts used (defaults to ggplot2's defaults)}
+\item{Define}{a base_size (Defaults to 10) and base_family and bold_family for Fonts used (defaults to ggplot2's defaults)}
 }
 \description{
 Zi Theme based on theme_grey
 }
 \examples{
 \dontrun{
-library(extrafont)
-library(tidyverse)
-font_import()
-loadfonts(device="win")
-ggplot(as.data.frame(Titanic) \%>\% group_by(Class) \%>\% summarise(n=sum(Freq)), aes(x=Class,  y=n)) + geom_bar(stat="identity" , fill=zi_cols("ziblue")) +  theme_zi() 
+library(showtext)
+font_add_google(name = "Roboto Condensed", family = "Roboto Condensed")
+showtext_auto()
+ggplot(as.data.frame(Titanic) \%>\% group_by(Class) \%>\% summarise(n=sum(Freq)), aes(x=Class,  y=n)) + geom_bar(stat="identity" , fill=zi_cols("zihimmelblau")) +  theme_zi() 
 }
 }
 \keyword{theme}
