@@ -152,7 +152,7 @@ dumbbell_plot <- ggplot(plotdata) +aes(x=str_wrap(Beschreibung,60),
            group=GOP) + 
     geom_line(color="grey", size=3) +
     geom_point(size=4) + 
-    theme_zi() + scale_color_zi("main") + coord_flip()
+    theme_zi(fontsize=14) + scale_color_zi("main") + coord_flip()
   dumbbell_plot
 
 ## ---- fig.height = 4, fig.width = 6, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----

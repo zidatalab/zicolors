@@ -56,11 +56,10 @@ theme_zi <- function(fontsize=10, font = "Roboto Condensed") {
     text = ggplot2::element_text(family=font, color="#194B5A", size=fontsize),
     
     ## Title
-    plot.title = ggplot2::element_text(size=fontsize*1.2, face="bold", margin=ggplot2::margin(0,0,0,0)),
+    plot.title = ggplot2::element_text(size=fontsize*1.2, face="bold"), #, margin=ggplot2::margin(0,0,0,0)
     
     ## subtitle 
-    plot.subtitle = ggplot2::element_text(size=fontsize*1.2,
-                                          margin=ggplot2::margin(4,0,4,0)),
+    plot.subtitle = ggplot2::element_text(size=fontsize*1.2),
     #Legend format
     legend.position = "bottom",
     legend.justification='left',
