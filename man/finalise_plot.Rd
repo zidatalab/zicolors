@@ -36,6 +36,7 @@ Running this function will save your plot with the correct guidelines for public
 It will left align your title, subtitle and source, add the BBC blocks at the bottom right and save it to your specified location.
 }
 \examples{
+\dontrun{
 finalise_plot(plot_name = myplot,
 source = "The source for my data",
 save_filepath = "filename_that_my_plot_should_be_saved_to-nc.png",
@@ -43,6 +44,7 @@ width_cm = 16,
 height_cm = 6,
 logo_image_path = "logo_image_filepath.png"
 )
+}
 
 }
 \keyword{finalise_plot}

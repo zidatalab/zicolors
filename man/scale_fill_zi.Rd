@@ -13,8 +13,8 @@ scale_fill_zi(palette = "main", discrete = TRUE, reverse = FALSE, ...)
 Zi fill scale for ggplot2 with different pallettes
 }
 \examples{
-ggplot(iris, aes(x=Species,y=Sepal.Width, fill = Species)) +   geom_bar(stat = "summary", fun.y = "mean") +  theme_zi() + scale_fill_zi(
-
-
+\dontrun{
+ggplot(iris, aes(x=Species,y=Sepal.Width, fill = Species)) +   geom_bar(stat = "summary", fun.y = "mean") +  theme_zi() + scale_fill_zi()
+}
 }
 \keyword{custom_scale_color()}

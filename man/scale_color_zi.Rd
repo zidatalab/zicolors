@@ -13,8 +13,8 @@ scale_color_zi(palette = "main", discrete = TRUE, reverse = FALSE, ...)
 Zi color scale for ggplot2 with different pallettes
 }
 \examples{
+\dontrun{
 ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zi() + scale_color_zi()
-
-
+}
 }
 \keyword{custom_scale_color()}

@@ -13,6 +13,8 @@ theme_zidatalab(fontsize = 14, font = "Calibri")
 Zi Datalab Theme with grey bg axis and labels based on theme_zi() optimal suited to print maps.
 }
 \examples{
+\dontrun{
 ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zidatalab() +  scale_color_zi()
+}
 }
 \keyword{theme}

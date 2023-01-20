@@ -41,13 +41,15 @@ zi_colors_old <- c(
 #' @keywords theme
 #' @export
 #' @examples
-#' library(extrafont)
-#' library(tidyverse)
-#' font_import()
-#' loadfonts(device="win")
-#' ggplot(as.data.frame(Titanic) %>% group_by(Class) %>% summarise(n=sum(Freq)), aes(x=Class,  y=n)) + geom_bar(stat="identity" , fill=zi_cols("ziblue")) +  theme_zi() 
+#' \dontrun{
+#' library(showtext)
+#' font_add_google(name = "Roboto", family = "Roboto")
+#' font_add_google(name = "Roboto Condensed", family = "Roboto Condensed")
+#' showtext_auto()
+#' ggplot(as.data.frame(Titanic) %>% group_by(Class) %>% summarise(n=sum(Freq)), aes(x=Class,  y=n)) + geom_bar(stat="identity" , fill=zi_cols("zihimmelblau")) +  theme_zi() 
+#' }
 
-theme_zi <- function(fontsize=14,font = "Calibri") {
+theme_zi <- function(fontsize=14,font = "Roboto") {
   
   ggplot2::theme(
     
@@ -104,10 +106,11 @@ theme_zi <- function(fontsize=14,font = "Calibri") {
 #' @keywords theme
 #' @export
 #' @examples
+#' \dontrun{
 #' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zi_void()
-#'
+#' }
 
-theme_zi_titels <- function (fontsize=14,font = "Calibri") {
+theme_zi_titels <- function (fontsize=14,font = "Roboto") {
   theme_zi(fontsize=fontsize,font = font) +
     theme(axis.title = ggplot2::element_text(family=font,size=fontsize,face="bold",color="#194B5A"),
           legend.title = element_text(family=font,size=fontsize,color="#194B5A", face = "bold"),
@@ -123,7 +126,7 @@ theme_zi_titels <- function (fontsize=14,font = "Calibri") {
 #' @keywords theme
 #' @export
 
-theme_zi_horizontal <- function (fontsize=14,font = "Calibri") {
+theme_zi_horizontal <- function (fontsize=14,font = "Roboto") {
   theme_zi(fontsize=fontsize,font = font) +
   theme(panel.grid.major.x =   element_line(color = "#ebf0f0"),
           panel.grid.major.y = element_blank()) 
@@ -136,7 +139,7 @@ theme_zi_horizontal <- function (fontsize=14,font = "Calibri") {
 #' @keywords theme
 #' @export
 
-theme_zi_titels_horizontal <- function (fontsize=14,font = "Calibri") {
+theme_zi_titels_horizontal <- function (fontsize=14,font = "Roboto") {
   theme_zi_titels(fontsize=fontsize,font = font) +
     theme(panel.grid.major.x =   element_line(color = "#ebf0f0"),
           panel.grid.major.y = element_blank()) 
@@ -149,10 +152,11 @@ theme_zi_titels_horizontal <- function (fontsize=14,font = "Calibri") {
 #' @keywords theme
 #' @export
 #' @examples
+#' \dontrun{
 #' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zi_void()
-#'
+#' }
 
-theme_zi_void <- function (fontsize=14, font = "Calibri") {
+theme_zi_void <- function (fontsize=14, font = "Roboto") {
   theme_zi(fontsize=fontsize,font = font) +
     theme(panel.grid.major.y = element_blank(),
           axis.text.x =  element_blank(),
@@ -174,10 +178,12 @@ theme_zi_void <- function (fontsize=14, font = "Calibri") {
 #' @keywords theme
 #' @export
 #' @examples
+#' \dontrun{
 #' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zidatalab() +  scale_color_zi()
+#' }
 
 
-theme_zidatalab <- function (fontsize=14, font = "Calibri") {
+theme_zidatalab <- function (fontsize=14, font = "Roboto") {
   theme_zi(fontsize=fontsize,font = font) +
     theme(panel.grid.major.y = ggplot2::element_line(color="#ebf0f0"),
           panel.background = ggplot2::element_rect(fill="white"),
@@ -193,8 +199,9 @@ theme_zidatalab <- function (fontsize=14, font = "Calibri") {
 #' @keywords theme
 #' @export
 #' @examples
+#' \dontrun{
 #' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zi_void()
-#'
+#' }
 
 # Function to access colors by Names
 zi_cols <- function(...) {
@@ -211,7 +218,8 @@ zi_cols <- function(...) {
 zi_palettes <- list(
   `main`        = zi_cols("zilindgruen", "zihimmelblau","ziblaugruen"),
   `main2colors` = zi_cols("zilindgruen", "zihimmelblau"),
-  `main4colors` = zi_cols("zilindgruen", "zihimmelblau","ziblaugruen", "zisignalrot")
+  `main4colors` = zi_cols("zilindgruen", "zihimmelblau","ziblaugruen", "zisignalrot"),
+  `bluegrey`    = zi_cols("zihimmelblau", "ziblaugrau")
 )
 
 # Palette Function
@@ -224,13 +232,14 @@ zi_pal <- function(palette = "main", reverse = FALSE, ...) {
 
 #' Zi color scale for ggplot2 with different pallettes
 #'
-#' @param Options include palette (Defaults to "main" zi Blue/Green/Orange, with other options beeing based on mostly 2 colors except of "qualitative" with 4 colors)
+#' @param Options include palette (Defaults to "main" zi Blue/Green/Bluegreen, with other options being based on mostly 2 colors except of "qualitative" with 4 colors)
 #' @keywords custom_scale_color()
 #' @export
 #' @examples
+#' \dontrun{
 #' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zi() + scale_color_zi()
-#'
-#'
+#' }
+
 scale_color_zi <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
   pal <- zi_pal(palette = palette, reverse = reverse)
   
@@ -242,15 +251,16 @@ scale_color_zi <- function(palette = "main", discrete = TRUE, reverse = FALSE, .
 }
 
 
-#' Zi fill scale for ggplot2 with different pallettes
+#' Zi fill scale for ggplot2 with different palettes
 #'
-#' @param Options include palette (Defaults to "main" zi Blue-Shades, with other options beeing "all", "qualitative")
+#' @param Options include palette (Defaults to "main" zi Blue-Shades, with other options being "all", "qualitative")
 #' @keywords custom_scale_color()
 #' @export
 #' @examples
-#' ggplot(iris, aes(x=Species,y=Sepal.Width, fill = Species)) +   geom_bar(stat = "summary", fun.y = "mean") +  theme_zi() + scale_fill_zi(
-#'
-#'
+#' \dontrun{
+#' ggplot(iris, aes(x=Species,y=Sepal.Width, fill = Species)) +   geom_bar(stat = "summary", fun.y = "mean") +  theme_zi() + scale_fill_zi()
+#' }
+
 scale_fill_zi  <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
   pal <- zi_pal(palette = palette, reverse = reverse)
   
@@ -281,7 +291,7 @@ left_align <- function(plot_name, pieces){
 create_footer <- function (source_name, logo_image_path) {
   #Make the footer
   footer <- grid::grobTree(grid::textGrob(source_name,
-                                          x = 0.09, hjust = 0, gp = grid::gpar(fontsize=8, fontfamily="Calibri")), # edgar: added fontfamily Calibri
+                                          x = 0.09, hjust = 0, gp = grid::gpar(fontsize=8, fontfamily="Roboto")), # edgar: added fontfamily Roboto
                            grid::rasterGrob(png::readPNG(logo_image_path), x = 0.04))
   return(footer)
   
@@ -302,6 +312,7 @@ create_footer <- function (source_name, logo_image_path) {
 
 #' @keywords finalise_plot
 #' @examples
+#' \dontrun{
 #' finalise_plot(plot_name = myplot,
 #' source = "The source for my data",
 #' save_filepath = "filename_that_my_plot_should_be_saved_to-nc.png",
@@ -309,6 +320,7 @@ create_footer <- function (source_name, logo_image_path) {
 #' height_cm = 6,
 #' logo_image_path = "logo_image_filepath.png"
 #' )
+#' }
 #'
 #' @export
 finalise_plot <- function(plot_name,
@@ -316,7 +328,8 @@ finalise_plot <- function(plot_name,
                           save_filepath=file.path(Sys.getenv("TMPDIR"), "tmp-nc.png"),
                           width_cm=16,
                           height_cm=9,
-                          logo_image_path = file.path(system.file("data", package = 'zicolors'),"zilogo_square.png")) {
+                          logo_image_path = file.path(system.file("data", package = 'zicolors'),
+                                                      "zilogo_square.png")) {
   
   footer <- create_footer(source_name, logo_image_path)
   

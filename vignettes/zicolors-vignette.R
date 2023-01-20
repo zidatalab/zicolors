@@ -1,5 +1,5 @@
 ## ---- echo=FALSE--------------------------------------------------------------
-htmltools::img(src = knitr::image_uri(file.path("../data/logo_zi.jpg")), 
+htmltools::img(src = knitr::image_uri(file.path("../data/logo_zi.png")), 
                alt = 'logo', 
                width = '256' , 
                style = 'position:absolute; top:0; right:0; padding:10px;'
@@ -39,13 +39,13 @@ Darmkrebsvorsorge_gesamt <-
   readxl::read_excel("../data/Darmkrebsvorsorge Anzahl Patienten.xlsx",     
                      sheet = "GOP 01730-01748") %>% gather(Jahr,Patienten,3:dim(.)[2])
 Darmkrebsvorsorge_gesamt %>% head() %>% 
-   kable() %>%   kable_styling() %>% row_spec(0, bold = T, color = "white", background = zi_cols("ziblue"))
+   kable() %>%   kable_styling() %>% row_spec(0, bold = T, color = "white", background = zi_cols("zihimmelblau"))
 
 Darmkrebsvorsorge_Patienten <- readxl::read_excel("../data/Darmkrebsvorsorge Anzahl Patienten.xlsx",     
                                                   sheet = "GOP 01741") %>%
   gather(Jahr,Patienten,3:dim(.)[2])  %>% mutate(Patienten=ifelse(Patienten=="<30",NA,as.numeric(Patienten)))
 Darmkrebsvorsorge_Patienten %>% head() %>%   kable() %>%
-  kable_styling() %>% row_spec(0, bold = T, color = "white", background = zi_cols("ziblue"))
+  kable_styling() %>% row_spec(0, bold = T, color = "white", background = zi_cols("zihimmelblau"))
 
 ## ----  fig.height = 0.5, fig.width = 6, fig.align ="left",caption="Übersicht über alle Farbskalen" ,echo=TRUE, message=FALSE, warning=FALSE----
 explot <- as.data.frame(cbind("x"=seq(1:128),"y"=1)) %>%
@@ -62,7 +62,7 @@ for (zicolorsheme in names(zicolors::zi_palettes)) {
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
   ggplot(., aes(x=Jahr,y=Patienten)) + 
-  geom_bar(stat="identity", fill=zi_cols("ziblue")) + 
+  geom_bar(stat="identity", fill=zi_cols("zihimmelblau")) + 
   theme_zi() + 
   labs(title="Patienten mit Früherkennungskoloskopie", subtitle="Anzahl in 1000")
 
@@ -70,7 +70,7 @@ Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>%
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
   ggplot(., aes(x=Jahr,y=Patienten)) + 
-  geom_bar(stat="identity", fill=zi_cols("ziblue")) + 
+  geom_bar(stat="identity", fill=zi_cols("zihimmelblau")) + 
   theme_zi_titels() + 
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr")
 
@@ -78,7 +78,7 @@ Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>%
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
   ggplot(., aes(x=Jahr,y=Patienten)) + 
-  geom_bar(stat="identity", fill=zi_cols("ziblue")) + 
+  geom_bar(stat="identity", fill=zi_cols("zihimmelblau")) + 
   theme_zi_titels() + 
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr") + 
   geom_hline(yintercept = 0, size=0.75) 

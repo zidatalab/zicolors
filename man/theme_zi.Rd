@@ -13,10 +13,12 @@ theme_zi(fontsize = 14, font = "Calibri")
 Zi Theme based on theme_grey
 }
 \examples{
+\dontrun{
 library(extrafont)
 library(tidyverse)
 font_import()
 loadfonts(device="win")
 ggplot(as.data.frame(Titanic) \%>\% group_by(Class) \%>\% summarise(n=sum(Freq)), aes(x=Class,  y=n)) + geom_bar(stat="identity" , fill=zi_cols("ziblue")) +  theme_zi() 
+}
 }
 \keyword{theme}

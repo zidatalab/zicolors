@@ -4,13 +4,13 @@ author: "Dr. Lars E. Kroll"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Zi Grafiken und Plots im Corporate Desig}
+  %\VignetteIndexEntry{Zi Grafiken und Plots im Corporate Design}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
 ```{r, echo=FALSE}
-htmltools::img(src = knitr::image_uri(file.path("../data/logo_zi.jpg")), 
+htmltools::img(src = knitr::image_uri(file.path("../data/logo_zi.png")), 
                alt = 'logo', 
                width = '256' , 
                style = 'position:absolute; top:0; right:0; padding:10px;'
@@ -57,6 +57,8 @@ Hinweis: Eventuell muss als Graphic-Backend "AGG" gesetzt werden in RStudio: Too
 
 Hinweis: Auf Nicht-Windows-Maschinen (z.B. Linux) müssen die Windows-Schriftarten (insbesondere Calibri und seine Varianten) installiert sein. Siehe z.B.: [Calibri und Ubuntu](https://kodejava.org/how-do-i-install-calibri-font-in-ubuntu/).
 
+Hinweis: Falls der Fehler "Found FontName for 0 fonts" bzw "No FontName. Skipping." beim font_import() auftritt, muss folgendes ausgeführt werden (alle Betriebssysteme): library(remotes), dann remotes::install_version("Rttf2pt1", version = "1.3.8").
+
 Hinweis: Damit die Windows-Schriftarten (insbesondere Calibri) erkannt werden, muss das (r)agg-Device gesetzt werden.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -85,13 +87,13 @@ Darmkrebsvorsorge_gesamt <-
   readxl::read_excel("../data/Darmkrebsvorsorge Anzahl Patienten.xlsx",     
                      sheet = "GOP 01730-01748") %>% gather(Jahr,Patienten,3:dim(.)[2])
 Darmkrebsvorsorge_gesamt %>% head() %>% 
-   kable() %>%   kable_styling() %>% row_spec(0, bold = T, color = "white", background = zi_cols("ziblue"))
+   kable() %>%   kable_styling() %>% row_spec(0, bold = T, color = "white", background = zi_cols("zihimmelblau"))
 
 Darmkrebsvorsorge_Patienten <- readxl::read_excel("../data/Darmkrebsvorsorge Anzahl Patienten.xlsx",     
                                                   sheet = "GOP 01741") %>%
   gather(Jahr,Patienten,3:dim(.)[2])  %>% mutate(Patienten=ifelse(Patienten=="<30",NA,as.numeric(Patienten)))
 Darmkrebsvorsorge_Patienten %>% head() %>%   kable() %>%
-  kable_styling() %>% row_spec(0, bold = T, color = "white", background = zi_cols("ziblue"))
+  kable_styling() %>% row_spec(0, bold = T, color = "white", background = zi_cols("zihimmelblau"))
 ```
 
 # Grafiken
@@ -123,7 +125,7 @@ for (zicolorsheme in names(zicolors::zi_palettes)) {
 
 ### Gezieltes Anwählen einzelner Farben
 
-Einzelne Farben können mit dem Befehl `zi_cols()` beliebig verwendet werden. Bswp. `zi_cols("zidarkblue")`.
+Einzelne Farben können mit dem Befehl `zi_cols()` beliebig verwendet werden. Bswp. `zi_cols("zihimmelblau")`.
 
 # Beispiele für Grafiken
 ## Balkendiagramme
@@ -135,7 +137,7 @@ Ein simples Balkendiagramm. Wichtig ist, dass beim Diagramm im Standard keine Ac
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
   ggplot(., aes(x=Jahr,y=Patienten)) + 
-  geom_bar(stat="identity", fill=zi_cols("ziblue")) + 
+  geom_bar(stat="identity", fill=zi_cols("zihimmelblau")) + 
   theme_zi() + 
   labs(title="Patienten mit Früherkennungskoloskopie", subtitle="Anzahl in 1000")
 ```
@@ -149,7 +151,7 @@ Falls das nicht möglich ist, sollte das alternative Thema `theme_zi_titels()` v
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
   ggplot(., aes(x=Jahr,y=Patienten)) + 
-  geom_bar(stat="identity", fill=zi_cols("ziblue")) + 
+  geom_bar(stat="identity", fill=zi_cols("zihimmelblau")) + 
   theme_zi_titels() + 
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr")
 ```
@@ -162,7 +164,7 @@ Sollten **horizontale Achsenlinien** gewünscht sein, können diese mit den Funk
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
   ggplot(., aes(x=Jahr,y=Patienten)) + 
-  geom_bar(stat="identity", fill=zi_cols("ziblue")) + 
+  geom_bar(stat="identity", fill=zi_cols("zihimmelblau")) + 
   theme_zi_titels() + 
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr") + 
   geom_hline(yintercept = 0, size=0.75) 
