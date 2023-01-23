@@ -69,6 +69,7 @@ theme_zi <- function(fontsize=10, font = "Roboto Condensed") {
 
     #Axis format
     axis.title = ggplot2::element_blank(),
+    axis.text = ggplot2::element_text(color="#194B5A"),
     axis.text.x = ggplot2::element_text(margin=ggplot2::margin(5, b = 10)),
     axis.ticks = ggplot2::element_blank(),
     axis.line = ggplot2::element_blank(),
@@ -86,7 +87,7 @@ theme_zi <- function(fontsize=10, font = "Roboto Condensed") {
     #Strip background (#This sets the panel background for facet-wrapped plots to white, 
     #removing the standard grey ggplot background colour)
     strip.background = ggplot2::element_rect(fill="white"),
-    strip.text = ggplot2::element_text(hjust = 0),
+    strip.text = ggplot2::element_text(color="#194B5A", hjust = 0),
     
     #for facet plots its useful to have more space between plots
     panel.spacing = unit(2, "lines")
@@ -205,6 +206,7 @@ zi_palettes <- list(
 )
 
 # Palette Function
+#' @export
 zi_pal <- function(palette = "main", reverse = FALSE, ...) {
   pal <- zi_palettes[[palette]]
   if (reverse) pal <- rev(pal)

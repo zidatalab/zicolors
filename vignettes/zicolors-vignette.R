@@ -44,16 +44,19 @@ Darmkrebsvorsorge_Patienten <- readxl::read_excel("../data/Darmkrebsvorsorge Anz
 Darmkrebsvorsorge_Patienten %>% head() %>%   kable() %>%
   kable_styling() %>% row_spec(0, bold = T, color = "white", background = zi_cols("ziblaugruen"))
 
-## ----  fig.height = 0.5, fig.width = 6, fig.align ="left",caption="Übersicht über alle Farbskalen" ,echo=TRUE, message=FALSE, warning=FALSE----
-explot <- as.data.frame(cbind("x"=seq(1:128),"y"=1)) %>%
-  ggplot(.,aes(x=x,y=y,fill=x)) + geom_bar(stat="identity", show.legend = FALSE) + 
-  theme_void() 
-for (zicolorsheme in names(zicolors::zi_palettes)) {
-  myplot <- explot + geom_text(aes(x=20,y=.5, label=paste(zicolorsheme)),
-                               size=4,hjust="left",color="white") + 
-          scale_fill_zi(paste(zicolorsheme), discrete = FALSE)
-  print(myplot)
+## ----  fig.height = 3, fig.width = 6, fig.align ="left",caption="Übersicht über alle Farbskalen" ,echo=TRUE, message=FALSE, warning=FALSE----
+n_col <- 128
+img <- function(obj, nam) {
+  image(1:length(obj), 1, as.matrix(1:length(obj)), col=obj, 
+        main = nam, ylab = "", xaxt = "n", yaxt = "n",  bty = "n")
 }
+
+par(mfrow=c(5, 1), mar=rep(1, 4))
+img(zi_pal("main")(n_col), "main")
+img(zi_pal("main3colors")(n_col), "main3colors")
+img(zi_pal("main4colors")(n_col), "main4colors")
+img(zi_pal("bluegrey")(n_col), "bluegrey")
+img(zi_pal("divergent")(n_col), "divergent")
 
 ## ---- fig.height = 4.5, fig.width = 5 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
@@ -140,20 +143,8 @@ my_fit <- survfit(my_surv ~ rx, conf.type="log-log", data=ovarian) # create a su
 ggsp <- ggsurvplot(my_fit, censor.shape="I")
 ggsp_data <- ggsp$plot$data # we need to extract the data from the ggsurvplot-object
 
-ggplot(ggsp_data) + aes(x=time,color=ifelse(strata=="rx=1","Gruppe 1", "Gruppe 2"),y=surv*100) + geom_step(size=2) + scale_color_zi() + theme_zi() + scale_y_continuous(breaks=seq(0,100,10),limits=c(0,100)) + labs(color="",title="Überlebensanalyse",subtitle="Überlebensrate in %") + theme(legend.position = "bottom" )
+ggplot(ggsp_data) + aes(x=time,color=ifelse(strata=="rx=1","Gruppe 1", "Gruppe 2"),y=surv*100) + geom_step(size=2) + scale_color_zi() + theme_zi() + scale_y_continuous(breaks=seq(0,100,10),limits=c(0,100)) + labs(color="",title="Überlebensanalyse",subtitle="Überlebensrate in % nach Tagen") + theme(legend.position = "bottom" )
 
-
-## ---- fig.height = 4, fig.width = 8, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
-plotdata <- Darmkrebsvorsorge_gesamt %>% filter(Jahr %in% c(min(Jahr),max(Jahr)))  %>% filter(!is.na(Patienten))
-
-dumbbell_plot <- ggplot(plotdata) +aes(x=str_wrap(Beschreibung,60),
-           y=Patienten/1000000,
-           color=Jahr, 
-           group=GOP) + 
-    geom_line(color="grey", size=3) +
-    geom_point(size=4) + 
-    theme_zi(fontsize=14) + scale_color_zi("main") + coord_flip()
-  dumbbell_plot
 
 ## ---- fig.height = 4, fig.width = 6, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
 data(iris)
@@ -163,6 +154,18 @@ ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species, color=Species)) +
   scale_fill_zi("main3colors") + scale_color_zi("main3colors") +  
   labs(title="Iris data: species comparison", subtitle="Sepal length in cm") + 
   stat_n_text(y.expand.factor=0.2, size=3.5, family="Roboto Condensed", color = "#194B5A")
+
+## ---- fig.height = 4, fig.width = 8, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
+plotdata <- Darmkrebsvorsorge_gesamt %>% filter(Jahr %in% c(min(Jahr),max(Jahr)))  %>% filter(!is.na(Patienten))
+
+dumbbell_plot <- ggplot(plotdata) +aes(x=str_trunc(Beschreibung,60),
+           y=Patienten/1000000,
+           color=Jahr, 
+           group=GOP) + 
+    geom_line(color="grey", size=3) +
+    geom_point(size=4) + 
+    theme_zi(fontsize=14) + scale_color_zi("main") + coord_flip()
+  dumbbell_plot
 
 ## ----eval=FALSE, include=TRUE, echo=TRUE--------------------------------------
 #  finalise_plot(dumbbell_plot,

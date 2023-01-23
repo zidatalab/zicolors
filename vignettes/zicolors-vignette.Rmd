@@ -96,22 +96,30 @@ Es gibt aktuell drei verschiedene Stile:
 * `theme_zi_axistitles()` (Standard für klassische Grafiken mit Achsenbeschriftung)
 * `theme_zi_void()` (Grafiken ohne Achsen und Hilfslinien)
 
+Weiterhin gibt es auch zwei Stile für Grafiken (insbesondere Bar Charts/Säulendiagramme) mit horizontaler Ausrichtung:
+
+* `theme_zi_horizontal`
+* `theme_zi_axistitles_horizontal`
+
 ## Farboptionen für Skalen in Grafiken
 
 Anhand der ggplot2-Skalen `scale_fill_zi(FARB_NAME)` und  `scale_color_zi(FARB_NAME)` können Plots mit Standard-Farbskalen, die sich an den Vorgaben des Zi Corporate Designs orientieren erzeugt werden. Die Skalen gehen von diskreten Variablen als Basis für die Farbkodierung aus. Sofern Plots auf Basis kontinuierlicher Variablen erzeugt werden sollen, muss die Option `discrete=FALSE` verwendet werden (bspw. also `scale_fill_zi(COLOR_SCHEME_NAME, discrete=FALSE)`).
 
 ### Übersicht
 
-```{r,  fig.height = 0.5, fig.width = 6, fig.align ="left",caption="Übersicht über alle Farbskalen" ,echo=TRUE, message=FALSE, warning=FALSE}
-explot <- as.data.frame(cbind("x"=seq(1:128),"y"=1)) %>%
-  ggplot(.,aes(x=x,y=y,fill=x)) + geom_bar(stat="identity", show.legend = FALSE) + 
-  theme_void() 
-for (zicolorsheme in names(zicolors::zi_palettes)) {
-  myplot <- explot + geom_text(aes(x=20,y=.5, label=paste(zicolorsheme)),
-                               size=4,hjust="left",color="white") + 
-          scale_fill_zi(paste(zicolorsheme), discrete = FALSE)
-  print(myplot)
+```{r,  fig.height = 3, fig.width = 6, fig.align ="left",caption="Übersicht über alle Farbskalen" ,echo=TRUE, message=FALSE, warning=FALSE}
+n_col <- 128
+img <- function(obj, nam) {
+  image(1:length(obj), 1, as.matrix(1:length(obj)), col=obj, 
+        main = nam, ylab = "", xaxt = "n", yaxt = "n",  bty = "n")
 }
+
+par(mfrow=c(5, 1), mar=rep(1, 4))
+img(zi_pal("main")(n_col), "main")
+img(zi_pal("main3colors")(n_col), "main3colors")
+img(zi_pal("main4colors")(n_col), "main4colors")
+img(zi_pal("bluegrey")(n_col), "bluegrey")
+img(zi_pal("divergent")(n_col), "divergent")
 ```
 
 ### Gezieltes Anwählen einzelner Farben
@@ -243,26 +251,8 @@ my_fit <- survfit(my_surv ~ rx, conf.type="log-log", data=ovarian) # create a su
 ggsp <- ggsurvplot(my_fit, censor.shape="I")
 ggsp_data <- ggsp$plot$data # we need to extract the data from the ggsurvplot-object
 
-ggplot(ggsp_data) + aes(x=time,color=ifelse(strata=="rx=1","Gruppe 1", "Gruppe 2"),y=surv*100) + geom_step(size=2) + scale_color_zi() + theme_zi() + scale_y_continuous(breaks=seq(0,100,10),limits=c(0,100)) + labs(color="",title="Überlebensanalyse",subtitle="Überlebensrate in %") + theme(legend.position = "bottom" )
+ggplot(ggsp_data) + aes(x=time,color=ifelse(strata=="rx=1","Gruppe 1", "Gruppe 2"),y=surv*100) + geom_step(size=2) + scale_color_zi() + theme_zi() + scale_y_continuous(breaks=seq(0,100,10),limits=c(0,100)) + labs(color="",title="Überlebensanalyse",subtitle="Überlebensrate in % nach Tagen") + theme(legend.position = "bottom" )
 
-```
-
-
-## Visualisierung von Veränderungen
-
-Um Veränderungen zu visualisieren bieten sich sog. dumbbell charts an. Sie zeigen für heterogene Outcomes Veränderungen zwischen zwei Zeitpunkten an. Wichtig ist bei der Konstruktion darauf zu achten, zuerst die Verbindungliene und anschließend die Punkte zu definieren. Um Labels besser lesbar zu machen, wurde der Plot mit `coord_flip()` gekippt und die Labels mit `stringr::str_trunc()` gekürzt.
-
-```{r, fig.height = 4, fig.width = 8, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
-plotdata <- Darmkrebsvorsorge_gesamt %>% filter(Jahr %in% c(min(Jahr),max(Jahr)))  %>% filter(!is.na(Patienten))
-
-dumbbell_plot <- ggplot(plotdata) +aes(x=str_wrap(Beschreibung,60),
-           y=Patienten/1000000,
-           color=Jahr, 
-           group=GOP) + 
-    geom_line(color="grey", size=3) +
-    geom_point(size=4) + 
-    theme_zi(fontsize=14) + scale_color_zi("main") + coord_flip()
-  dumbbell_plot
 ```
 
 ## Boxplots
@@ -279,6 +269,23 @@ ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species, color=Species)) +
   stat_n_text(y.expand.factor=0.2, size=3.5, family="Roboto Condensed", color = "#194B5A")
 ```
 
+
+## Visualisierung von Veränderungen
+
+Um Veränderungen zu visualisieren bieten sich sog. dumbbell charts an. Sie zeigen für heterogene Outcomes Veränderungen zwischen zwei Zeitpunkten an. Wichtig ist bei der Konstruktion darauf zu achten, zuerst die Verbindungliene und anschließend die Punkte zu definieren. Um Labels besser lesbar zu machen, wurde der Plot mit `coord_flip()` gekippt und die Labels mit `stringr::str_trunc()` gekürzt.
+
+```{r, fig.height = 4, fig.width = 8, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
+plotdata <- Darmkrebsvorsorge_gesamt %>% filter(Jahr %in% c(min(Jahr),max(Jahr)))  %>% filter(!is.na(Patienten))
+
+dumbbell_plot <- ggplot(plotdata) +aes(x=str_trunc(Beschreibung,60),
+           y=Patienten/1000000,
+           color=Jahr, 
+           group=GOP) + 
+    geom_line(color="grey", size=3) +
+    geom_point(size=4) + 
+    theme_zi(fontsize=14) + scale_color_zi("main") + coord_flip()
+  dumbbell_plot
+```
 
 # Plots mit integriertem Zi Logo
 
