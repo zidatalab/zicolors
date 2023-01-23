@@ -8,8 +8,8 @@ finalise_plot(
   plot_name,
   source_name,
   save_filepath = file.path(Sys.getenv("TMPDIR"), "tmp-nc.png"),
-  width_cm = 16,
-  height_cm = 9,
+  width = 3840,
+  height = 2160,
   logo_image_path = file.path(system.file("data", package = "zicolors"),
     "zilogo_square.png")
 )
@@ -21,12 +21,12 @@ finalise_plot(
 
 \item{save_filepath}{Exact filepath that you want the plot to be saved to}
 
+\item{logo_image_path}{File path for the logo image you want to use in the right hand side of your chart,
+which needs to be a PNG file - defaults to BBC blocks image that sits within the data folder of your package}
+
 \item{width_cm}{Width in cm that you want to save your chart to - defaults to 640}
 
 \item{height_cm}{Height in cm that you want to save your chart to - defaults to 450}
-
-\item{logo_image_path}{File path for the logo image you want to use in the right hand side of your chart,
-which needs to be a PNG file - defaults to BBC blocks image that sits within the data folder of your package}
 }
 \value{
 (Invisibly) an updated ggplot object.

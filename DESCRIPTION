@@ -8,6 +8,7 @@ Description: Dieses Package erlaubt es, Grafiken und Plots im Zi-Corporate Desig
 Depends:
     ggplot2,
     magrittr,
+    magick,
     dplyr,
     showtext,
     knitr

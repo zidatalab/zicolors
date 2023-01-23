@@ -165,21 +165,14 @@ dumbbell_plot <- ggplot(plotdata) +aes(x=str_trunc(Beschreibung,60),
     geom_line(color="grey", size=3) +
     geom_point(size=4) + 
     theme_zi(fontsize=14) + scale_color_zi("main") + coord_flip()
-  dumbbell_plot
-
-## ----eval=FALSE, include=TRUE, echo=TRUE--------------------------------------
-#  finalise_plot(dumbbell_plot,
-#   source = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017",
-#   width_cm = 20,
-#   height_cm =20*3/4,
-#  save_filepath = "dumbbell.jpg"
-#   )
+dumbbell_plot
 
 ## ----include=FALSE, echo=TRUE-------------------------------------------------
+library(magick)
 finalise_plot(dumbbell_plot,
- source = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017",
- width_cm = 10,
- height_cm =10*3/4,
-save_filepath = "dumbbell.jpg"
+ source = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
+ width = 3840,
+ height = 2160,
+ save_filepath = "dumbbell.png"
  )
 

@@ -275,7 +275,11 @@ left_align <- function(plot_name, pieces){
 create_footer <- function (source_name, logo_image_path) {
   #Make the footer
   footer <- grid::grobTree(grid::textGrob(source_name,
-                                          x = 0.09, hjust = 0, gp = grid::gpar(fontsize=10, fontfamily="Roboto Condensed")), # edgar: added fontfamily Roboto
+                                          x = 0.09,
+                                          hjust = 0, 
+                                          gp = grid::gpar(fontsize=10, 
+                                                          fontfamily="Roboto Condensed",
+                                                          col="#194B5A")), # edgar: added fontfamily Roboto
                            grid::rasterGrob(png::readPNG(logo_image_path), x = 0.04))
   return(footer)
   
@@ -310,20 +314,32 @@ create_footer <- function (source_name, logo_image_path) {
 finalise_plot <- function(plot_name,
                           source_name,
                           save_filepath=file.path(Sys.getenv("TMPDIR"), "tmp-nc.png"),
-                          width_cm=16,
-                          height_cm=9,
+                          width=3840,
+                          height=2160,
                           logo_image_path = file.path(system.file("data", package = 'zicolors'),
                                                       "zilogo_square.png")) {
+
+  png(save_filepath, width=width, height=height, units="px")
+  print(plot_name %>% 
+          theme(text = element_text(size=500)))
+  dev.off()
   
-  footer <- create_footer(source_name, logo_image_path)
+  # Call back the plot
+  plot <- image_read(save_filepath)
+  # And bring in a logo
+  logo_raw <- image_read(logo_image_path) 
   
-  #Draw your left-aligned grid
-  plot_left_aligned <- left_align(plot_name, c("subtitle", "title", "caption"))
-  plot_grid <- ggpubr::ggarrange(plot_left_aligned, footer,
-                                 ncol = 1, nrow = 2, heights=c(1,.10))
-  ## print(paste("Saving to", save_filepath))
-  save_plot(plot_grid, width_cm, height_cm, save_filepath)
-  ## Return (invisibly) a copy of the graph. Can be assigned to a
-  ## variable or silently ignored.
-  return(plot_grid)
+  # Scale down the logo and give it a border and annotation
+  logowidth <- as.character(as.integer(width/10))
+  logoheight <- as.character(as.integer(height/10))
+  logo <- logo_raw %>%
+    image_scale(paste0(logowidth, "x", logoheight)) %>% 
+    image_background("white", flatten = TRUE) %>%
+    image_annotate(source_name, color = "#194B5A", gravity = "northeast")
+  
+  # Stack them on top of each other
+  final_plot <- image_append(c(plot, logo), stack = TRUE)
+  # And overwrite the plot without a logo
+  image_write(final_plot, save_filepath)
+
 }
