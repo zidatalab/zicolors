@@ -272,7 +272,7 @@ ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species, color=Species)) +
 
 ## Visualisierung von Veränderungen
 
-Um Veränderungen zu visualisieren bieten sich sog. dumbbell charts an. Sie zeigen für heterogene Outcomes Veränderungen zwischen zwei Zeitpunkten an. Wichtig ist bei der Konstruktion darauf zu achten, zuerst die Verbindungliene und anschließend die Punkte zu definieren. Um Labels besser lesbar zu machen, wurde der Plot mit `coord_flip()` gekippt und die Labels mit `stringr::str_trunc()` gekürzt.
+Um Veränderungen zu visualisieren bieten sich sog. dumbbell charts an. Sie zeigen für heterogene Outcomes Veränderungen zwischen zwei Zeitpunkten an. Wichtig ist bei der Konstruktion darauf zu achten, zuerst die Verbindungliniee und anschließend die Punkte zu definieren. Um Labels besser lesbar zu machen, wurde der Plot mit `coord_flip()` gekippt und die Labels mit `stringr::str_trunc()` gekürzt.
 
 ```{r, fig.height = 4, fig.width = 8, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
 plotdata <- Darmkrebsvorsorge_gesamt %>% filter(Jahr %in% c(min(Jahr),max(Jahr)))  %>% filter(!is.na(Patienten))
@@ -281,26 +281,26 @@ dumbbell_plot <- ggplot(plotdata) +aes(x=str_trunc(Beschreibung,60),
            y=Patienten/1000000,
            color=Jahr, 
            group=GOP) + 
-    geom_line(color="grey", size=3) +
+    geom_line(color="grey", linewidth=3) +
     geom_point(size=4) + 
-    theme_zi(fontsize=14) + scale_color_zi("main") + coord_flip()
+    theme_zi() + scale_color_zi("main") + coord_flip()
 dumbbell_plot
 ```
 
 # Plots mit integriertem Zi Logo
 
-Mithilfe der Funktion `finalise_plot` und dem Package "magick" kann das Zi-Logo einem Plot hinzugefügt werden. .....
+Mithilfe der Funktion `finalise_plot` und dem Package "magick" kann das Zi-Logo einem Plot hinzugefügt werden.
 
 Syntax:
 
 ```{r include=FALSE, echo=TRUE}
 library(magick)
-finalise_plot(dumbbell_plot,
- source = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
- width = 3840,
- height = 2160,
- save_filepath = "dumbbell.png"
+finalise_plot(plot_name = dumbbell_plot,
+ source_name = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
+ width = 16,
+ height = 9,
+ save_filepath = "data/dumbbell.png"
  )
 ```
-![](dumbbell.png){width="100%"}
+![](data/dumbbell.png){width="100%"}
 

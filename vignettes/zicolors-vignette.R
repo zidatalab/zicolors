@@ -162,17 +162,17 @@ dumbbell_plot <- ggplot(plotdata) +aes(x=str_trunc(Beschreibung,60),
            y=Patienten/1000000,
            color=Jahr, 
            group=GOP) + 
-    geom_line(color="grey", size=3) +
+    geom_line(color="grey", linewidth=3) +
     geom_point(size=4) + 
-    theme_zi(fontsize=14) + scale_color_zi("main") + coord_flip()
+    theme_zi() + scale_color_zi("main") + coord_flip()
 dumbbell_plot
 
 ## ----include=FALSE, echo=TRUE-------------------------------------------------
 library(magick)
-finalise_plot(dumbbell_plot,
- source = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
- width = 3840,
- height = 2160,
- save_filepath = "dumbbell.png"
+finalise_plot(plot_name = dumbbell_plot,
+ source_name = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
+ width = 16,
+ height = 9,
+ save_filepath = "data/dumbbell.png"
  )
 

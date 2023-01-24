@@ -8,8 +8,8 @@ finalise_plot(
   plot_name,
   source_name,
   save_filepath = file.path(Sys.getenv("TMPDIR"), "tmp-nc.png"),
-  width = 3840,
-  height = 2160,
+  width = 16,
+  height = 9,
   logo_image_path = file.path(system.file("data", package = "zicolors"),
     "zilogo_square.png")
 )

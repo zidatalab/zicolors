@@ -314,32 +314,56 @@ create_footer <- function (source_name, logo_image_path) {
 finalise_plot <- function(plot_name,
                           source_name,
                           save_filepath=file.path(Sys.getenv("TMPDIR"), "tmp-nc.png"),
-                          width=3840,
-                          height=2160,
+                          width=16,
+                          height=9,
                           logo_image_path = file.path(system.file("data", package = 'zicolors'),
                                                       "zilogo_square.png")) {
-
-  png(save_filepath, width=width, height=height, units="px")
-  print(plot_name %>% 
-          theme(text = element_text(size=500)))
-  dev.off()
+  
+  showtext_opts(dpi = 300)
+  # png(save_filepath, width=width, height=height, units="cm", res=300) # 
+  # plot_name
+  # dev.off()
+  
+  ggsave(save_filepath, plot=plot_name, 
+         # device=png(), type="cairo",
+         width=width, height=height,
+         units="cm", dpi=300)
   
   # Call back the plot
   plot <- image_read(save_filepath)
+  
+  # get px size of image
+  px_width <- image_info(plot) %>% pull(width)
+  px_height <- image_info(plot) %>% pull(height)
+  
   # And bring in a logo
   logo_raw <- image_read(logo_image_path) 
   
   # Scale down the logo and give it a border and annotation
-  logowidth <- as.character(as.integer(width/10))
-  logoheight <- as.character(as.integer(height/10))
+  logowidth <- as.character(as.integer(px_width/10))
+  logoheight <- as.character(as.integer(px_height/10))
+  showtext_auto()
   logo <- logo_raw %>%
     image_scale(paste0(logowidth, "x", logoheight)) %>% 
     image_background("white", flatten = TRUE) %>%
-    image_annotate(source_name, color = "#194B5A", gravity = "northeast")
+    image_extent(color="white",
+                 gravity="east",
+                 paste0(
+                   as.character(as.integer(px_width)),
+                   "x",
+                   as.character(logoheight)
+                 )
+    ) %>%
+    image_annotate(text = source_name, 
+                   # size=20, 
+                   color = "#194B5A", 
+                   # font = "Roboto Condensed", 
+                   gravity = "east", 
+                   location = paste0("+", as.character(logowidth))) # 
   
   # Stack them on top of each other
   final_plot <- image_append(c(plot, logo), stack = TRUE)
   # And overwrite the plot without a logo
   image_write(final_plot, save_filepath)
-
+  
 }
