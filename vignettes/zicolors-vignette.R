@@ -169,7 +169,7 @@ dumbbell_plot
 
 ## ----include=FALSE, echo=TRUE-------------------------------------------------
 library(magick)
-finalise_plot(plot_name = dumbbell_plot,
+finalise_plot_compositemagick(plot_name = dumbbell_plot,
  source_name = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
  width = 16,
  height = 9,

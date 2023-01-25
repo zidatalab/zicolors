@@ -1,4 +1,4 @@
-# Specification of colors according to Corporate Design Guidelines as of 02.07.2019
+# Specification of colors according to Corporate Design Guidelines as of 2023
 # Note: This Script is heavily inspired by the BBC Style Guide
 
 zi_colors <- c(
@@ -13,26 +13,6 @@ zi_colors <- c(
   `zilindgruendunkel`     = rgb(30/255,145/255,80/255),
   `ziblaugrau`            = rgb(115/255,145/255,155/255),
   `ziblaugrauhell`        = rgb(235/255,240/255,240/255)
-)
-
-zi_colors_old <- c(
-  `zidarkred`       =  rgb(156/255,5/255,136/255),
-  `zired`           =  rgb(200/255,0/255,177/255),
-  `zilightred`      =  rgb(244/255,204/255,239/255),
-  `zidarkblue`       =  rgb(0/255,101/255,150/255),
-  `ziblue`           =  rgb(0/255,134/255,197/255),
-  `zilightblue`      =  rgb(204/255,231/255,243/255),
-  `zidarkgreen`      =  rgb(136/255,156/255,5/255),
-  `zigreen`          =  rgb(177/255,200/255,0/255),
-  `zilightgreen`     =  rgb(239/255,244/255,204/255),
-  `zidarkorange`     =  rgb(175/255,119/255,3/255),
-  `ziorange`         =  rgb(228/255,153/255,0/255),
-  `zilightorange`    =  rgb(250/255,235/255,204/255),
-  `zipurple`         =  rgb(197/255,0/255,134/255),
-  `zidarkgrey`       =  rgb(88/255,88/255,90/255),
-  `zigrey`           =  rgb(135/255,136/255,138/255),
-  `zilightgrey`      =  rgb(217/255,218/255,219/255),
-  `ziultralightgrey` =  rgb(247/255,248/255,249/255)
 )
 
 #' Zi Theme based on theme_grey
@@ -66,7 +46,7 @@ theme_zi <- function(fontsize=10, font = "Roboto Condensed") {
     legend.text.align = 0,
     legend.background = ggplot2::element_blank(),
     legend.key = ggplot2::element_blank(),
-
+    
     #Axis format
     axis.title = ggplot2::element_blank(),
     axis.text = ggplot2::element_text(color="#194B5A"),
@@ -120,7 +100,7 @@ theme_zi_axistitles <- function (fontsize=10, font = "Roboto Condensed") {
 
 theme_zi_horizontal <- function (fontsize=10, font = "Roboto Condensed") {
   theme_zi(fontsize=fontsize, font = font) +
-  theme(panel.grid.major.x =   element_line(color = "#ebf0f0"),
+    theme(panel.grid.major.x =   element_line(color = "#ebf0f0"),
           panel.grid.major.y = element_blank()) 
 }
 
@@ -255,69 +235,38 @@ scale_fill_zi  <- function(palette = "main", discrete = TRUE, reverse = FALSE, .
   }
 }
 
-
-# Helper Functions to finalise plot for Print
-save_plot <- function (plot_grid, width, height, save_filepath) {
-  grid::grid.draw(plot_grid)
-  #save it
-  ggplot2::ggsave(filename = save_filepath,
-                  plot=plot_grid, width=(width), height=(height),  unit="cm", bg="white")
-}
-
-#Left align text
-left_align <- function(plot_name, pieces){
-  grob <- ggplot2::ggplotGrob(plot_name)
-  n <- length(pieces)
-  grob$layout$l[grob$layout$name %in% pieces] <- 2
-  return(grob)
-}
-
-create_footer <- function (source_name, logo_image_path) {
-  #Make the footer
-  footer <- grid::grobTree(grid::textGrob(source_name,
-                                          x = 0.09,
-                                          hjust = 0, 
-                                          gp = grid::gpar(fontsize=10, 
-                                                          fontfamily="Roboto Condensed",
-                                                          col="#194B5A")), # edgar: added fontfamily Roboto
-                           grid::rasterGrob(png::readPNG(logo_image_path), x = 0.04))
-  return(footer)
-  
-}
-
-#' Arrange alignment and save BBC ggplot chart
+#' Arrange alignment and save ggplot chart
 #'
-#' Running this function will save your plot with the correct guidelines for publication for a BBC News graphic.
-#' It will left align your title, subtitle and source, add the BBC blocks at the bottom right and save it to your specified location.
+#' Running this function will save your plot with left align your title, subtitle and right align source, add the Zi logo at the bottom right and save it to your specified location.
 #' @param plot_name The variable name of the plot you have created that you want to format and save
-#' @param source_name The text you want to come after the text 'Source:' in the bottom left hand side of your side
+#' @param source_name The text you want to in the bottom left hand side of your plot
 #' @param save_filepath Exact filepath that you want the plot to be saved to
-#' @param width_cm Width in cm that you want to save your chart to - defaults to 640
-#' @param height_cm Height in cm that you want to save your chart to - defaults to 450
+#' @param width Width in cm that you want to save your chart to - defaults to 16
+#' @param height Height in cm that you want to save your chart to - defaults to 9
 #' @param logo_image_path File path for the logo image you want to use in the right hand side of your chart,
-#'  which needs to be a PNG file - defaults to BBC blocks image that sits within the data folder of your package
+#'  which needs to be a PNG file - defaults to Zi square-ish logo that sits within the data folder of your package
 #' @return (Invisibly) an updated ggplot object.
 
-#' @keywords finalise_plot
+#' @keywords finalise_plot_onlymagick
 #' @examples
 #' \dontrun{
-#' finalise_plot(plot_name = myplot,
+#' finalise_plot_onlymagick(plot_name = myplot,
 #' source = "The source for my data",
 #' save_filepath = "filename_that_my_plot_should_be_saved_to-nc.png",
-#' width_cm = 16,
-#' height_cm = 6,
+#' width = 16,
+#' height = 9,
 #' logo_image_path = "logo_image_filepath.png"
 #' )
 #' }
 #'
 #' @export
-finalise_plot <- function(plot_name,
-                          source_name,
-                          save_filepath=file.path(Sys.getenv("TMPDIR"), "tmp-nc.png"),
-                          width=16,
-                          height=9,
-                          logo_image_path = file.path(system.file("data", package = 'zicolors'),
-                                                      "zilogo_square.png")) {
+finalise_plot_onlymagick <- function(plot_name,
+                                     source_name,
+                                     save_filepath=file.path(Sys.getenv("TMPDIR"), "tmp-nc.png"),
+                                     width=16,
+                                     height=9,
+                                     logo_image_path = file.path(system.file("data", package = 'zicolors'),
+                                                                 "zilogo_square.png")) {
   
   showtext_opts(dpi = 300)
   # png(save_filepath, width=width, height=height, units="cm", res=300) # 
@@ -355,7 +304,7 @@ finalise_plot <- function(plot_name,
                  )
     ) %>%
     image_annotate(text = source_name, 
-                   # size=20, 
+                   size=20, 
                    color = "#194B5A", 
                    # font = "Roboto Condensed", 
                    gravity = "east", 
@@ -363,6 +312,154 @@ finalise_plot <- function(plot_name,
   
   # Stack them on top of each other
   final_plot <- image_append(c(plot, logo), stack = TRUE)
+  # And overwrite the plot without a logo
+  image_write(final_plot, save_filepath)
+  
+}
+
+#' Arrange alignment and save ggplot chart
+#'
+#' Running this function will save your plot with left align your title, subtitle and right align source, add the Zi logo at the bottom right and save it to your specified location.
+#' @param plot_name The variable name of the plot you have created that you want to format and save
+#' @param source_name The text you want to in the bottom left hand side of your plot
+#' @param save_filepath Exact filepath that you want the plot to be saved to
+#' @param width Width in cm that you want to save your chart to - defaults to 16
+#' @param height Height in cm that you want to save your chart to - defaults to 9
+#' @param logo_image_path File path for the logo image you want to use in the right hand side of your chart,
+#'  which needs to be a PNG file - defaults to Zi square-ish logo that sits within the data folder of your package
+#' @return (Invisibly) an updated ggplot object.
+
+#' @keywords finalise_plot_captionmagick
+#' @examples
+#' \dontrun{
+#' finalise_plot_captionmagick(plot_name = myplot,
+#' source = "The source for my data",
+#' save_filepath = "filename_that_my_plot_should_be_saved_to-nc.png",
+#' width = 16,
+#' height = 9,
+#' logo_image_path = "logo_image_filepath.png"
+#' )
+#' }
+#'
+#' @export
+finalise_plot_captionmagick <- function(
+    plot_name,
+    source_name,
+    save_filepath=file.path(Sys.getenv("TMPDIR"), "tmp-nc.png"),
+    width=16,
+    height=9,
+    logo_image_path = file.path(system.file("data", package = 'zicolors'),
+                                "zilogo_square.png")) {
+  
+  showtext_opts(dpi = 300)
+  # png(save_filepath, width=width, height=height, units="cm", res=300) # 
+  # plot_name
+  # dev.off()
+  
+  ggsave(save_filepath, 
+         plot=plot_name + 
+           labs(caption=source_name), 
+         # device=png(), type="cairo",
+         width=width, height=height,
+         units="cm", dpi=300)
+  
+  # Call back the plot
+  plot <- image_read(save_filepath)
+  
+  # get px size of image
+  px_width <- image_info(plot) %>% pull(width)
+  px_height <- image_info(plot) %>% pull(height)
+  
+  # And bring in a logo
+  logo_raw <- image_read(logo_image_path) 
+  
+  # Scale down the logo and give it a border and annotation
+  logowidth <- as.character(as.integer(px_width/10))
+  logoheight <- as.character(as.integer(px_height/10))
+  logo <- logo_raw %>%
+    image_scale(paste0(logowidth, "x", logoheight)) %>% 
+    image_background("white", flatten = TRUE) %>%
+    image_extent(color="white",
+                 gravity="east",
+                 paste0(
+                   as.character(as.integer(px_width)),
+                   "x",
+                   as.character(logoheight)
+                 ))
+  
+  # Stack them on top of each other
+  final_plot <- image_append(c(plot, logo), stack = TRUE)
+  # And overwrite the plot without a logo
+  image_write(final_plot, save_filepath)
+  
+}
+
+#' Arrange alignment and save ggplot chart
+#'
+#' Running this function will save your plot with left align your title, subtitle and right align source, add the Zi logo at the bottom right and save it to your specified location.
+#' @param plot_name The variable name of the plot you have created that you want to format and save
+#' @param source_name The text you want to in the bottom left hand side of your plot
+#' @param save_filepath Exact filepath that you want the plot to be saved to
+#' @param width Width in cm that you want to save your chart to - defaults to 16
+#' @param height Height in cm that you want to save your chart to - defaults to 9
+#' @param logo_image_path File path for the logo image you want to use in the right hand side of your chart,
+#'  which needs to be a PNG file - defaults to Zi square-ish logo that sits within the data folder of your package
+#' @return (Invisibly) an updated ggplot object.
+
+#' @keywords finalise_plot_compositemagick
+#' @examples
+#' \dontrun{
+#' finalise_plot_compositemagick(plot_name = myplot,
+#' source = "The source for my data",
+#' save_filepath = "filename_that_my_plot_should_be_saved_to-nc.png",
+#' width = 16,
+#' height = 9,
+#' logo_image_path = "logo_image_filepath.png"
+#' )
+#' }
+#'
+#' @export
+finalise_plot_compositemagick <- function(
+    plot_name,
+    source_name,
+    save_filepath=file.path(Sys.getenv("TMPDIR"), "tmp-nc.png"),
+    width=16,
+    height=9,
+    logo_image_path = file.path(system.file("data", package = 'zicolors'),
+                                "zilogo_square.png")) {
+  
+  showtext_opts(dpi = 300)
+  # png(save_filepath, width=width, height=height, units="cm", res=300) # 
+  # plot_name
+  # dev.off()
+  
+  ggsave(save_filepath, 
+         plot=plot_name + 
+           labs(caption=source_name), 
+         # device=png(), type="cairo",
+         width=width, height=height,
+         units="cm", dpi=300)
+  
+  # Call back the plot
+  plot <- image_read(save_filepath)
+  
+  # get px size of image
+  px_width <- image_info(plot) %>% pull(width)
+  px_height <- image_info(plot) %>% pull(height)
+  
+  # And bring in a logo
+  logo_raw <- image_read(logo_image_path) 
+  
+  # Scale down the logo and give it a border and annotation
+  logowidth <- as.character(as.integer(px_width/10))
+  logoheight <- as.character(as.integer(px_height/10))
+  logo <- logo_raw %>%
+    image_scale(paste0(logowidth, "x", logoheight)) %>% 
+    image_background("white", flatten = TRUE)
+  
+  # Stack them on top of each other
+  final_plot <- plot %>% 
+    image_composite(logo, gravity="southwest")
   # And overwrite the plot without a logo
   image_write(final_plot, save_filepath)
   
