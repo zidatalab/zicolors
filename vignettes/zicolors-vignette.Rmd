@@ -14,20 +14,19 @@ htmltools::img(src = knitr::image_uri(file.path("../data/logo_zi.png")),
                alt = 'logo', 
                width = '256' , 
                style = 'position:absolute; top:0; right:0; padding:10px;'
-              )
+)
 ```
 
 
 # Hintergrund
 
-Das Paket `zicolors` ermöglicht es Grafiken im Stil des Zi Corporate Designs mit dem Paket ggplot2 in R zu erstellen. Es ermöglicht einfache Anpassungen der Syntax und gibt allgemeine Stilvorgaben, die sich am Stil von Infografiken in Zeitungen orientieren. Bei Bedarf steht zudem ein klassischerer Stil zur Verfügung, der eine modernisierte Form von Charts in Excel ist. In dieser Übersicht werden die verschiedenen Anwendungsmöglichkeiten für den Stil dargestellt. 
+Das Paket `zicolors` ermöglicht es, Grafiken im Stil des Zi-Corporate Designs mit dem Paket `ggplot2` in R zu erstellen. Es ermöglicht einfache Anpassungen der Syntax und gibt allgemeine Stilvorgaben, die sich am Stil von Infografiken in Zeitungen orientieren. In dieser Übersicht werden einige verschiedene Anwendungsmöglichkeiten für den Stil vorgestellt und allgemeine Tipps zum Grafikerstellen gegeben. 
 
 Der Stil orientiert sich an einem vergleichbaren Stil der [BBC](https://bbc.github.io/rcookbook/).
 
-
 # Installation
 
-Die Installation des Stiles erfolgt anhand eines im Netzwerk bereitgestellten Paketes mit dem Paket `devtools' von R.
+Die Installation des Stiles erfolgt anhand eines im Netzwerk bereitgestellten Paketes mit dem Paket `devtools` von R.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
 
@@ -49,11 +48,13 @@ devtools::install_github("zidatalab/zicolors")
 
 # Einbindung des Stiles
 
-Zur Anwendung und Installation müssen die R Pakete tidyverse, devtools und showtext verfügbar sein. Die weiteren Libraries sind optional.
+Zur Anwendung und Installation müssen die R Pakete `tidyverse`, `devtools` und `showtext` verfügbar sein. Die weiteren Libraries sind optional.
 
 ## Libraries
 
-Hinweis: Es muss als Fallback zur offiziellen Zi-CD-Schrift für Grafiken "TT Norms Pro Condensed" eine Google Font (Roboto Condensed) installiert werden.
+Hinweis: Es muss als Fallback zur offiziellen Zi-CD-Schrift für Grafiken "TT Norms Pro Condensed" eine Google Font (Roboto Condensed) heruntergeladen/installiert werden.
+
+Das Einbinden einer im System installierten (Nicht-Standard-)Schrift ist in R nicht trivial. Wir arbeiten an einer möglichst gut verwendbaren Lösung!
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
 # Prepare Using package and fonts
@@ -78,7 +79,7 @@ Darmkrebsvorsorge_gesamt <-
   readxl::read_excel("../data/Darmkrebsvorsorge Anzahl Patienten.xlsx",     
                      sheet = "GOP 01730-01748") %>% gather(Jahr,Patienten,3:dim(.)[2])
 Darmkrebsvorsorge_gesamt %>% head() %>% 
-   kable() %>%   kable_styling() %>% row_spec(0, bold = T, color = "white", background = zi_cols("ziblaugruen"))
+  kable() %>%   kable_styling() %>% row_spec(0, bold = T, color = "white", background = zi_cols("ziblaugruen"))
 
 Darmkrebsvorsorge_Patienten <- readxl::read_excel("../data/Darmkrebsvorsorge Anzahl Patienten.xlsx",     
                                                   sheet = "GOP 01741") %>%
@@ -93,7 +94,7 @@ Darmkrebsvorsorge_Patienten %>% head() %>%   kable() %>%
 Es gibt aktuell drei verschiedene Stile:
 
 * `theme_zi()` (Standard für Infografiken und Präsentationen)
-* `theme_zi_axistitles()` (Standard für klassische Grafiken mit Achsenbeschriftung)
+* `theme_zi_axistitles()` (für klassische Grafiken mit Achsenbeschriftung)
 * `theme_zi_void()` (Grafiken ohne Achsen und Hilfslinien)
 
 Weiterhin gibt es auch zwei Stile für Grafiken (insbesondere Bar Charts/Säulendiagramme) mit horizontaler Ausrichtung:
@@ -103,7 +104,7 @@ Weiterhin gibt es auch zwei Stile für Grafiken (insbesondere Bar Charts/Säulen
 
 ## Farboptionen für Skalen in Grafiken
 
-Anhand der ggplot2-Skalen `scale_fill_zi(FARB_NAME)` und  `scale_color_zi(FARB_NAME)` können Plots mit Standard-Farbskalen, die sich an den Vorgaben des Zi Corporate Designs orientieren erzeugt werden. Die Skalen gehen von diskreten Variablen als Basis für die Farbkodierung aus. Sofern Plots auf Basis kontinuierlicher Variablen erzeugt werden sollen, muss die Option `discrete=FALSE` verwendet werden (bspw. also `scale_fill_zi(COLOR_SCHEME_NAME, discrete=FALSE)`).
+Anhand der ggplot2-Skalen `scale_fill_zi(PALETTENNAME)` und  `scale_color_zi(PALETTENNAME)` können Plots mit Standard-Farbskalen, die sich an den Vorgaben des Zi-Corporate Designs orientieren, erzeugt werden. Die Skalen gehen von diskreten Variablen als Basis für die Farbkodierung aus. Sofern Plots auf Basis kontinuierlicher Variablen erzeugt werden sollen, muss die Option `discrete=FALSE` verwendet werden (bspw. also `scale_fill_zi(COLOR_SCHEME_NAME, discrete=FALSE)`).
 
 ### Übersicht
 
@@ -114,23 +115,26 @@ img <- function(obj, nam) {
         main = nam, ylab = "", xaxt = "n", yaxt = "n",  bty = "n")
 }
 
-par(mfrow=c(5, 1), mar=rep(1, 4))
+par(mfrow=c(6, 1), mar=rep(1, 4))
 img(zi_pal("main")(n_col), "main")
 img(zi_pal("main3colors")(n_col), "main3colors")
-img(zi_pal("main4colors")(n_col), "main4colors")
-img(zi_pal("bluegrey")(n_col), "bluegrey")
+img(zi_pal("shadesofblue")(n_col), "shadesofblue")
+img(zi_pal("shadesofgreen")(n_col), "shadesofgreen")
+img(zi_pal("bluehighlight")(n_col), "bluehighlight")
 img(zi_pal("divergent")(n_col), "divergent")
 ```
 
 ### Gezieltes Anwählen einzelner Farben
 
-Einzelne Farben können mit dem Befehl `zi_cols()` beliebig verwendet werden. Bswp. `zi_cols("zihimmelblau")`.
+Einzelne Farben können mit dem Befehl `zi_cols()` beliebig verwendet werden, z.B. `zi_cols("zihimmelblau")`. Achtung, die im Corporate Design vorgeschlagene Farbe für Hervorhebungen (`zi_cols("zisignalrot")`) ist sehr sparsam einzusetzen und sollte nur für Texthervorhebungen oder einen einzelnen Datenpunkt benutzt werden. Soll in einer Grafik ein Balken oder eine Linie gegenüber anderen Balken/Linien hervorgehoben werden, sollte die Standardfarbe `zi_cols("zihimmelblau")` im Kontrast zu `zi_cols("ziblaugrauhell")` verwendet werden (siehe auch weiter unten).
 
 # Beispiele für Grafiken
 ## Balkendiagramme
-### einfach
+### Standard
 
-Ein simples Balkendiagramm. Wichtig ist, dass beim Diagramm im Standard keine Achensbeschriftungen verwendet werden. Dies setzt voraus, dass der Titel und Untertitel der Abbildung **selbsterklärend** ist. 
+Wichtig ist, dass beim einfachen Balkendiagramm im Standard keine Achsenbeschriftungen verwendet werden. Dies setzt voraus, dass der Titel und Untertitel der Abbildung **selbsterklärend** ist. 
+
+Außerdem sollte nach dem Corporate Design die Breite der Säulen verringert werden (z.B. hier mit `width=0.5` innerhalb von `geom_bar()`), sowie eine Grundlinie hinzugefügt werden (mit `geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugrau"))`).
 
 ```{r , fig.height = 4.5, fig.width = 5 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
@@ -138,26 +142,15 @@ Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>%
   ggplot(., aes(x=Jahr,y=Patienten)) + 
   geom_bar(stat="identity", width=0.5, fill=zi_cols("zihimmelblau")) + 
   theme_zi() + 
-  labs(title="Patienten mit Früherkennungskoloskopie", subtitle="Anzahl in 1000")
+  labs(title="Patient*innen mit Früherkennungskoloskopie", subtitle="Anzahl in 1.000") + 
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugrau")) 
 ```
 
 
 ### mit Achsenbeschriftungen
-Falls das nicht möglich ist, sollte das alternative Thema `theme_zi_axistitles()` verwendet werden, dass Achsenbeschriftungen enthält.
 
+Generell ist die oben beschriebene Art ohne Achsentitel vorzuziehen. Falls das nicht möglich ist (z.B. bei Grafiken ohne Titel), sollte das alternative Thema `theme_zi_axistitles()` verwendet werden, dass Achsenbeschriftungen enthält.
 
-```{r , fig.height = 4.5, fig.width = 7 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
-Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
-  summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
-  ggplot(., aes(x=Jahr,y=Patienten)) + 
-  geom_bar(stat="identity", width=0.5, fill=zi_cols("zihimmelblau")) + 
-  theme_zi_axistitles() + 
-  labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr")
-```
-
-### Achsenlinien
-
-Sollten **horizontale Achsenlinien** gewünscht sein, können diese mit den Funktion `geom_hline()` erhalten werden. Vertikale Achenlinen können bei Bedarf analog mit `geom_vline()` erzeugt werden.
 
 ```{r , fig.height = 4.5, fig.width = 7 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
@@ -171,14 +164,14 @@ Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>%
 
 ### Hervorhebungen
 
-Ein einzelner Balken lässt sich durch einfügen einer `ifelse()` Bedingung hervorheben. Für komplexere Bedingungen kann ggf. das Paket `gghighlights()` genutzt werden ((Link)[https://yutannihilation.github.io/gghighlight/articles/gghighlight.html]).
+Ein einzelner Balken lässt sich durch Einfügen einer `ifelse()` Bedingung hervorheben. Für komplexere Bedingungen kann ggf. das Paket `gghighlights()` genutzt werden ((Link)[https://yutannihilation.github.io/gghighlight/articles/gghighlight.html]).
 
 ```{r , fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE}
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
   ggplot(., aes(x=Jahr,y=Patienten, fill=ifelse(.$Jahr==2013,"blau","grau"))) + 
   geom_bar(stat="identity", width=0.5) + 
-  theme_zi_axistitles() + scale_fill_zi("bluegrey") +
+  theme_zi_axistitles() + scale_fill_zi("bluehighlight") +
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr", fill="") + 
   geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugrau")) 
 ```
@@ -190,16 +183,17 @@ Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>%
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
   ggplot(., aes(x=Jahr,y=Patienten, fill=ifelse(.$Jahr==2013,"blau","grau"))) + 
   geom_bar(stat="identity", width=0.5) + 
-  theme_zi_axistitles_horizontal() + scale_fill_zi("bluegrey") +
+  theme_zi_axistitles_horizontal() + scale_fill_zi("bluehighlight") +
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr", fill="") + 
-  geom_hline(yintercept = 0, size=0.75) +
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugrau")) +
   coord_flip()
 ```
 
 ## Liniendiagramme
 
+Für die Darstellung von Zeitreihen bietet sich im Allgemeinen eher ein Liniendiagramm an.
 
-Für die Darstellung von Zeitreihen bietet sich generell eher ein Liniendiagramm an. Generell ist auch hier zu beachten, dass die Eingängigkeit der Darstellung profitiert, wenn die Legende in den Plot integriert wird. 
+Generell gilt für eine "gute" Grafik", dass überflüssiges und doppeltes vermieden wird: Hier ist es z.B. überflüssig, der Legende den Titel "Geschlecht" voranzustellen (mit `color=""` innerhalb von `labs()`).
 
 ```{r , fig.height = 4.5, fig.width = 7 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
 plotdata <- Darmkrebsvorsorge_Patienten %>% 
@@ -207,17 +201,47 @@ plotdata <- Darmkrebsvorsorge_Patienten %>%
   filter(Geschlecht %in% c("männlich","weiblich")) %>%
   group_by(Geschlecht,Jahr) %>% summarise(Patienten=sum(Patienten, na.rm=T)/1000)
 
-  ggplot(plotdata, aes(x=Jahr,y=Patienten, color=Geschlecht, group=Geschlecht)) + 
+ggplot(plotdata, aes(x=Jahr,y=Patienten, color=Geschlecht, group=Geschlecht)) + 
   geom_line(size=2) +  
   geom_point(shape = 21,size=3,fill="White",stroke=2) + 
   theme_zi() + 
-  labs(title="Patienten mit Früherkennungskoloskopie", subtitle="Anzahl in 1000") + 
-  scale_color_zi("main") + scale_y_continuous(breaks=seq(100,300,50), 
-                                                              limits=c(100,300)) 
+  ylim(0, NA) +
+  labs(title="Patient*innen mit Früherkennungskoloskopie", subtitle="Anzahl in 1000",
+       color="") + 
+  scale_color_zi("main") + scale_y_continuous(breaks=seq(0,300,50), 
+                                              limits=c(0,300)) 
 ```
 
+Empfohlen ist es aber hier, die Legenden-Labels direkt in den Plot zu integrieren. Die Labels wurden im Plot mit dem Paket `ggrepel` und der Funktion `geom_text_repel` gesetzt, um eine Überschneidung mit den Daten zu verhindern. Die Legende wird dann nicht mehr benötigt (`legend.position = "none"` innerhalb von `theme()`). Eventuell muss mit den Parametern innerhalb von `geom_text_repel` experimentiert werden.
 
-Um Teilgruppen zu vergleichen, sollte generell die Funktion facets genutzt werden. Die Labels wurden im Plot mit dem Paket `ggrepel` gesetzt, um eine Überschneidung mit den Daten zu verhindern.
+```{r , fig.height = 4.5, fig.width = 7 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
+plotdata <- Darmkrebsvorsorge_Patienten %>% 
+  mutate(Geschlecht=as.character(Geschlecht)) %>% 
+  filter(Geschlecht %in% c("männlich","weiblich")) %>%
+  group_by(Geschlecht,Jahr) %>% summarise(Patienten=sum(Patienten, na.rm=T)/1000)
+
+ggplot(plotdata, aes(x=Jahr,y=Patienten,
+                     color=Geschlecht, group=Geschlecht, label=Geschlecht)) + 
+  geom_line(size=2) +  
+  geom_point(shape = 21,size=3,fill="White",stroke=2) + 
+  theme_zi() +
+  theme(legend.position = "none") +
+  ylim(0, NA) +
+  labs(title="Patient*innen mit Früherkennungskoloskopie", subtitle="Anzahl in 1.000") + 
+  scale_color_zi("main") +
+  scale_y_continuous(breaks=seq(0,300,50), 
+                     limits=c(0,300)) +
+  geom_text_repel(data = . %>% filter (Jahr == max(Jahr)), 
+                  seed = 1,
+                  family="Roboto Condensed", 
+                  size = 4,
+                  point.padding = 20, ## wenig padding
+                  direction = 'y',
+                  nudge_y = c(0,0,1,1),
+                  force_pull = 100)
+```
+
+Um Teilgruppen zu vergleichen, sollte am besten die facet-Funktion (`facet_wrap()` oder `facet_grid()`) genutzt werden. Hier ist es besser, einmal die Legende zu plotten als an jeder Facet die Labels zu verwenden (doppeltes soll vermieden werden).
 
 ```{r , fig.height = 5.5, fig.width = 7 , fig.align ="left" , echo=TRUE, message=FALSE, warning=FALSE}
 plotdata <- Darmkrebsvorsorge_Patienten %>% 
@@ -232,6 +256,9 @@ ggplot(plotdata, aes(x=Jahr,y=Patienten, color=Geschlecht, group=Geschlecht)) +
   facet_grid(Alter~. ) + # , scales = "free_y"
   geom_point(shape = 21,size=3,fill="White",stroke=2) + 
   theme_zi() + 
+  ylim(0, NA) + 
+  labs(title="Patient*innen mit Früherkennungskoloskopie", subtitle="Anzahl in 1.000",
+       color="") +
   scale_color_zi("main") 
 ```
 
@@ -266,41 +293,78 @@ ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species, color=Species)) +
   geom_boxplot(lwd=1, fatten=1.5, alpha=.8, show.legend = FALSE) + theme_zi() + 
   scale_fill_zi("main3colors") + scale_color_zi("main3colors") +  
   labs(title="Iris data: species comparison", subtitle="Sepal length in cm") + 
+  ylim(0, NA) +
   stat_n_text(y.expand.factor=0.2, size=3.5, family="Roboto Condensed", color = "#194B5A")
 ```
 
 
 ## Visualisierung von Veränderungen
 
-Um Veränderungen zu visualisieren bieten sich sog. dumbbell charts an. Sie zeigen für heterogene Outcomes Veränderungen zwischen zwei Zeitpunkten an. Wichtig ist bei der Konstruktion darauf zu achten, zuerst die Verbindungliniee und anschließend die Punkte zu definieren. Um Labels besser lesbar zu machen, wurde der Plot mit `coord_flip()` gekippt und die Labels mit `stringr::str_trunc()` gekürzt.
+Um Veränderungen zu visualisieren bieten sich sog. dumbbell charts an. Sie zeigen für heterogene Outcomes Veränderungen zwischen zwei Zeitpunkten an. Wichtig ist bei der Konstruktion darauf zu achten, zuerst die Verbindunglinie und anschließend die Punkte zu definieren. Um Labels besser lesbar zu machen, wurde der Plot mit `coord_flip()` gekippt und die Labels mit `stringr::str_trunc()` gekürzt.
 
 ```{r, fig.height = 4, fig.width = 8, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
-plotdata <- Darmkrebsvorsorge_gesamt %>% filter(Jahr %in% c(min(Jahr),max(Jahr)))  %>% filter(!is.na(Patienten))
+plotdata <- Darmkrebsvorsorge_gesamt %>% 
+  filter(Jahr %in% c(min(Jahr),max(Jahr))) %>%
+  filter(!is.na(Patienten))
 
 dumbbell_plot <- ggplot(plotdata) +aes(x=str_trunc(Beschreibung,60),
-           y=Patienten/1000000,
-           color=Jahr, 
-           group=GOP) + 
-    geom_line(color="grey", linewidth=3) +
-    geom_point(size=4) + 
-    theme_zi() + scale_color_zi("main") + coord_flip()
+                                       y=Patienten/1000000,
+                                       color=Jahr, 
+                                       group=GOP) + 
+  geom_line(color=zi_cols("ziblaugrauhell"), linewidth=3) +
+  geom_point(size=4) + 
+  labs(title="GOPen zur Darmkrebsvorsorge",
+       subtitle="Anzahl in Mio. Patient*innen im Jahresvergleich",
+       color="") +
+  theme_zi() + scale_color_zi("main") + coord_flip()
 dumbbell_plot
 ```
 
-# Plots mit integriertem Zi Logo
+# Plots mit Quellenangabe
 
-Mithilfe der Funktion `finalise_plot` und dem Package "magick" kann das Zi-Logo einem Plot hinzugefügt werden.
+Soll einer Grafik die Quelle/Datengrundlage hinzugefügt werden, kann das direkt in `ggplot2` mit einer `caption` erledigt werden. Die Quelle steht automatisch wie vom Coroporate Design verlangt unten rechts. Diese Form ist die Grundlage für die Grafik des Monats und kann in druckfähiger Auflösung (300 dpi) mit `ggsave()` gespeichert werden, dafür muss allerdings vorher mit `showtext_opts(dpi = 300)` sichergestellt werden, dass die geladene Schriftart richtig in die Grafik integriert wird:
 
-Syntax:
+```{r, fig.height = 4, fig.width = 8, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
+dumbbell_plot_mitcaption <- dumbbell_plot +
+  labs(caption="Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.")
 
-```{r include=FALSE, echo=TRUE}
-library(magick)
-finalise_plot_compositemagick(plot_name = dumbbell_plot,
- source_name = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
- width = 16,
- height = 9,
- save_filepath = "data/dumbbell.png"
- )
+showtext_opts(dpi = 300)
+
+ggsave("data/dumbbell.png", 
+       plot=dumbbell_plot_mitcaption, 
+       width=16, height=9,
+       units="cm", dpi=300)
 ```
 ![](data/dumbbell.png){width="100%"}
 
+
+# Plots mit integriertem Zi-Logo
+
+Mithilfe der Funktionen `finalise_plot_logorechts` / `finalise_plot_logolinks` und dem Package `magick` können das Zi-Logo und eine Angabe zu Quellen/Datengrundlagen einem Plot hinzugefügt werden, sowie eine druckfähige Kopie der Grafik (300 dpi) gespeichert werden.
+
+Syntax für Logo links:
+
+```{r include=TRUE, echo=TRUE}
+library(magick)
+finalise_plot_logolinks(plot_name = dumbbell_plot,
+                        source_name = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
+                        width = 16,
+                        height = 9,
+                        save_filepath = "data/dumbbell_logolinks.png"
+)
+```
+![](data/dumbbell_logolinks.png){width="100%"}
+
+Sollte das Logo rechts stehen (wenn links nicht genug Freiraum ist, weil z.B. die Legende im Weg ist), wird die Syntax für die Platzierung des Logos etwas komplexer, weil die Quellenangabe etwas links vom Logo stehen sollte. Eventuell muss hier mit dem Parameter `hjust_source` zwischen 0 und 1 experimentiert werden:
+
+```{r include=TRUE, echo=TRUE}
+library(magick)
+finalise_plot_logorechts(plot_name = dumbbell_plot,
+                         source_name = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
+                         width = 16,
+                         height = 9,
+                         hjust_source = 0.2,
+                         save_filepath = "data/dumbbell_logorechts.png"
+)
+```
+![](data/dumbbell_logorechts.png){width="100%"}
