@@ -48,11 +48,11 @@ devtools::install_github("zidatalab/zicolors")
 
 # Einbindung des Stiles
 
-Zur Anwendung und Installation müssen die R Pakete `tidyverse`, `devtools` und `showtext` verfügbar sein. Die weiteren Libraries sind optional.
+Zur Anwendung und Installation müssen die R-Pakete `tidyverse`, `devtools` und `showtext` verfügbar sein. Weitere optionale Pakete sind `ggrepel` (für Labels), `kableExtra` (für Tabellen), sowie `magick` (zum Hinzufügen des Zi-Logos).
 
 ## Libraries
 
-Hinweis: Es muss als Fallback zur offiziellen Zi-CD-Schrift für Grafiken "TT Norms Pro Condensed" eine Google Font (Roboto Condensed) heruntergeladen/installiert werden.
+Hinweis: Es muss eventuell als Fallback zur offiziellen Zi-CD-Schrift für Grafiken "TT Norms Pro Condensed" eine Google Font (Roboto Condensed) heruntergeladen/installiert werden.
 
 Das Einbinden einer im System installierten (Nicht-Standard-)Schrift ist in R nicht trivial. Wir arbeiten an einer möglichst gut verwendbaren Lösung!
 
@@ -64,13 +64,12 @@ library("showtext")
 font_add_google(name = "Roboto Condensed", family = "Roboto Condensed")
 
 showtext_auto()
-
 ```
 
 
 # Tabellen
 
-Als Beispieldaten für die vorliegenden Analysen wird ein aggregierter Auszug aus der ARGO-Datenstelle zum Theme Krebsfrüherkennung verwendet, der für die Grafik des Monats März 2019 verwendet wird. Linda Zhu hat dazu die Daten aus der ARGO-Datenstelle exportiert.
+Als Beispieldaten für die vorliegenden Analysen wird ein aggregierter Auszug aus der ARGO-Datenstelle zum Theme Krebsfrüherkennung verwendet, der für die Grafik des Monats März 2019 verwendet wurde. Linda Zhu hat dazu die Daten aus der ARGO-Datenstelle exportiert.
 
 Es werden zwei Tabellen importiert, die in der mit dem Paket mitgelieferten MS Excel Datei als Reiter implementiert wurden.
 
@@ -115,18 +114,17 @@ img <- function(obj, nam) {
         main = nam, ylab = "", xaxt = "n", yaxt = "n",  bty = "n")
 }
 
-par(mfrow=c(6, 1), mar=rep(1, 4))
-img(zi_pal("main")(n_col), "main")
-img(zi_pal("main3colors")(n_col), "main3colors")
+par(mfrow=c(5, 1), mar=rep(1, 4))
+img(zi_pal("main")(2), "main")
 img(zi_pal("shadesofblue")(n_col), "shadesofblue")
 img(zi_pal("shadesofgreen")(n_col), "shadesofgreen")
-img(zi_pal("bluehighlight")(n_col), "bluehighlight")
+img(zi_pal("intensity")(n_col), "intensity")
 img(zi_pal("divergent")(n_col), "divergent")
 ```
 
 ### Gezieltes Anwählen einzelner Farben
 
-Einzelne Farben können mit dem Befehl `zi_cols()` beliebig verwendet werden, z.B. `zi_cols("zihimmelblau")`. Achtung, die im Corporate Design vorgeschlagene Farbe für Hervorhebungen (`zi_cols("zisignalrot")`) ist sehr sparsam einzusetzen und sollte nur für Texthervorhebungen oder einen einzelnen Datenpunkt benutzt werden. Soll in einer Grafik ein Balken oder eine Linie gegenüber anderen Balken/Linien hervorgehoben werden, sollte die Standardfarbe `zi_cols("zihimmelblau")` im Kontrast zu `zi_cols("ziblaugrauhell")` verwendet werden (siehe auch weiter unten).
+Einzelne Farben können mit dem Befehl `zi_cols()` beliebig verwendet werden, z.B. `zi_cols("zihimmelblau")`. Achtung, die im Corporate Design vorgeschlagene Farbe für Hervorhebungen (`zi_cols("zisignalrot")`) ist sehr sparsam einzusetzen und sollte nur für `r kableExtra::text_spec("Texthervorhebungen", color = zi_cols("zisignalrot"))` oder einen einzelnen Datenpunkt benutzt werden. Soll in einer Grafik ein Balken oder eine Linie gegenüber anderen Balken/Linien hervorgehoben werden, sollte die Standardfarbe `zi_cols("zihimmelblau")` im Kontrast zu helleren Farben (z.B. `zi_cols("zihimmelblauhell")` verwendet werden (siehe auch weiter unten).
 
 # Beispiele für Grafiken
 ## Balkendiagramme
@@ -134,7 +132,7 @@ Einzelne Farben können mit dem Befehl `zi_cols()` beliebig verwendet werden, z.
 
 Wichtig ist, dass beim einfachen Balkendiagramm im Standard keine Achsenbeschriftungen verwendet werden. Dies setzt voraus, dass der Titel und Untertitel der Abbildung **selbsterklärend** ist. 
 
-Außerdem sollte nach dem Corporate Design die Breite der Säulen verringert werden (z.B. hier mit `width=0.5` innerhalb von `geom_bar()`), sowie eine Grundlinie hinzugefügt werden (mit `geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugrau"))`).
+Außerdem sollte nach dem Corporate Design die Breite der Säulen verringert werden (z.B. hier mit `width=0.5` innerhalb von `geom_bar()`), sowie eine Grundlinie hinzugefügt werden (mit `geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen"))`).
 
 ```{r , fig.height = 4.5, fig.width = 5 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
@@ -143,7 +141,11 @@ Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>%
   geom_bar(stat="identity", width=0.5, fill=zi_cols("zihimmelblau")) + 
   theme_zi() + 
   labs(title="Patient*innen mit Früherkennungskoloskopie", subtitle="Anzahl in 1.000") + 
-  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugrau")) 
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen")) +
+  coord_cartesian(clip ="off") +
+  geom_segment(x = 0.4, xend = 9.5,
+               y = 538, yend = 538,
+               color=zi_cols("ziblaugruen"), size=0.1)
 ```
 
 
@@ -159,21 +161,24 @@ Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>%
   geom_bar(stat="identity", width=0.5, fill=zi_cols("zihimmelblau")) + 
   theme_zi_axistitles() + 
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr") + 
-  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugrau")) 
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen")) 
 ```
 
 ### Hervorhebungen
 
-Ein einzelner Balken lässt sich durch Einfügen einer `ifelse()` Bedingung hervorheben. Für komplexere Bedingungen kann ggf. das Paket `gghighlights()` genutzt werden ((Link)[https://yutannihilation.github.io/gghighlight/articles/gghighlight.html]).
+Ein einzelner Balken lässt sich durch Einfügen einer `ifelse()` Bedingung hervorheben.
 
 ```{r , fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE}
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
-  ggplot(., aes(x=Jahr,y=Patienten, fill=ifelse(.$Jahr==2013,"blau","grau"))) + 
+  ggplot(., aes(x=Jahr,y=Patienten, fill=ifelse(.$Jahr==2013,"blau","hellblau"))) + 
   geom_bar(stat="identity", width=0.5) + 
-  theme_zi_axistitles() + scale_fill_zi("bluehighlight") +
+  theme_zi_axistitles() + 
+  scale_fill_manual(values=unname(c(
+    zi_cols("zihimmelblau"), zi_cols("zihimmelblauhell")
+  ))) +
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr", fill="") + 
-  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugrau")) 
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen")) 
 ```
 
 Der gleiche Plot mit horizontaler Ausrichtung:
@@ -181,12 +186,81 @@ Der gleiche Plot mit horizontaler Ausrichtung:
 ```{r , fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE}
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
-  ggplot(., aes(x=Jahr,y=Patienten, fill=ifelse(.$Jahr==2013,"blau","grau"))) + 
+  ggplot(., aes(x=Jahr,y=Patienten, fill=ifelse(.$Jahr==2013,"blau","hellblau"))) + 
   geom_bar(stat="identity", width=0.5) + 
-  theme_zi_axistitles_horizontal() + scale_fill_zi("bluehighlight") +
+  theme_zi_axistitles_horizontal() + 
+    scale_fill_manual(values=unname(c(
+    zi_cols("zihimmelblau"), zi_cols("zihimmelblauhell")
+  ))) +
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr", fill="") + 
-  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugrau")) +
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen")) +
   coord_flip()
+```
+
+### Stacked Bar Charts
+
+Hierbei handelt es sich um ein Balkendiagramm mit einer Gruppierung innerhalb der Balken. Durch das Corporate Design sind standardmäßig nur zwei qualitativ unterschiedliche Gruppen möglich (mit den Hauptfarben `zi_cols("zihimmelblau")` und `zi_cols("zilindgruen")`). Sollten mehr Farben benötigt werden, müssen diese manuell mit `scale_fill_manual()` (bzw. `scale_color_manual()`) und der benötigten Anzahl von verfügbaren `zi_cols()` ausgewählt werden. 
+
+```{r, fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE}
+set.seed(42)
+beispieldaten <- tibble(X=sample(LETTERS[1:4], 1000, replace=TRUE),
+                        G=sample(letters[1:3], 1000, replace=TRUE))
+
+beispieldaten_summed <- beispieldaten %>% 
+  count(X, G)
+
+ggplot(beispieldaten_summed,
+       aes(x=X,
+           y=n,
+           fill=G)) + 
+  geom_bar(stat="identity", width=0.5, color="white") + 
+  scale_fill_manual(values=unname(c(
+    zi_cols("zihimmelblau"),
+    zi_cols("zilindgruen"),
+    zi_cols(("zihimmelblaudunkel"))))) +
+  theme_zi() +
+  labs(fill="", 
+       title="Stacked Bar Chart",
+       subtitle="Anzahl") + 
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen"))
+```
+
+Zusätzlich können die Gesamtzahlen in fett über den Balken erscheinen, sowie die Anzahlen der einzelnen Gruppen als Labels neben den Balken. Die Hilfslinien und die y-Achse werden dann nicht mehr benötigt! Auf jeden Fall muss aber mit verschiedenen Parametern experimentiert werden, insbesondere mit der Balkenbreite `width` innerhalb `geom_bar()`, mit der Schriftgröße `size` der Zahlenlabels innerhalb `geom_text` sowie ebendort mit `nudge_x` und `point.padding` für die Länge der Linien.
+
+```{r, fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE}
+beispieldaten_summed_withposition <- beispieldaten_summed %>% 
+  group_by(X) %>% 
+  arrange(rev(G), .by_group = TRUE) %>% 
+  mutate(myposition=cumsum(n)-n/2) %>% 
+  ungroup()
+
+ggplot(beispieldaten_summed_withposition,
+       aes(x=X,
+           y=n,
+           fill=G)) + 
+  geom_bar(stat="identity", width=0.4, color="white") + 
+  scale_fill_manual(values=unname(c(
+    zi_cols("zihimmelblau"),
+    zi_cols("zilindgruen"),
+    zi_cols(("zihimmelblaudunkel"))))) +
+  theme_zi() +
+  labs(fill="", 
+       title="Stacked Bar Chart",
+       subtitle="Anzahl") + 
+  geom_text(aes(label=after_stat(y), group=X),
+            stat='summary', fun=sum, vjust = -1,
+            family="Roboto Condensed", fontface="bold", 
+            size=3,
+            color=zi_cols("ziblaugruen")) +
+  geom_text_repel(aes(label=n, y=myposition),
+            family="Roboto Condensed", color=zi_cols("ziblaugruen"),
+            size=3,
+            nudge_x = -0.38,
+            point.padding = 3.5) +
+  theme(axis.text.y = element_blank(),
+        panel.grid.major.y = element_blank()) +
+  coord_cartesian(clip = "off") +
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen"))
 ```
 
 ## Liniendiagramme
@@ -291,7 +365,14 @@ data(iris)
 library(EnvStats) # to display sample sizes
 ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species, color=Species)) + 
   geom_boxplot(lwd=1, fatten=1.5, alpha=.8, show.legend = FALSE) + theme_zi() + 
-  scale_fill_zi("main3colors") + scale_color_zi("main3colors") +  
+    scale_fill_manual(values=unname(c(
+    zi_cols("zihimmelblau"),
+    zi_cols("zilindgruen"),
+    zi_cols(("zihimmelblaudunkel"))))) +
+  scale_color_manual(values=unname(c(
+    zi_cols("zihimmelblau"),
+    zi_cols("zilindgruen"),
+    zi_cols(("zihimmelblaudunkel"))))) +
   labs(title="Iris data: species comparison", subtitle="Sepal length in cm") + 
   ylim(0, NA) +
   stat_n_text(y.expand.factor=0.2, size=3.5, family="Roboto Condensed", color = "#194B5A")

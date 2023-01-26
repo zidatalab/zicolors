@@ -30,7 +30,6 @@ font_add_google(name = "Roboto Condensed", family = "Roboto Condensed")
 
 showtext_auto()
 
-
 ## ----echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE---------------
 Darmkrebsvorsorge_gesamt <- 
   readxl::read_excel("../data/Darmkrebsvorsorge Anzahl Patienten.xlsx",     
@@ -51,12 +50,11 @@ img <- function(obj, nam) {
         main = nam, ylab = "", xaxt = "n", yaxt = "n",  bty = "n")
 }
 
-par(mfrow=c(6, 1), mar=rep(1, 4))
-img(zi_pal("main")(n_col), "main")
-img(zi_pal("main3colors")(n_col), "main3colors")
+par(mfrow=c(5, 1), mar=rep(1, 4))
+img(zi_pal("main")(2), "main")
 img(zi_pal("shadesofblue")(n_col), "shadesofblue")
 img(zi_pal("shadesofgreen")(n_col), "shadesofgreen")
-img(zi_pal("bluehighlight")(n_col), "bluehighlight")
+img(zi_pal("intensity")(n_col), "intensity")
 img(zi_pal("divergent")(n_col), "divergent")
 
 ## ---- fig.height = 4.5, fig.width = 5 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
@@ -66,7 +64,11 @@ Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>%
   geom_bar(stat="identity", width=0.5, fill=zi_cols("zihimmelblau")) + 
   theme_zi() + 
   labs(title="Patient*innen mit Früherkennungskoloskopie", subtitle="Anzahl in 1.000") + 
-  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugrau")) 
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen")) +
+  coord_cartesian(clip ="off") +
+  geom_segment(x = 0.4, xend = 9.5,
+               y = 538, yend = 538,
+               color=zi_cols("ziblaugruen"), size=0.1)
 
 ## ---- fig.height = 4.5, fig.width = 7 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
@@ -75,26 +77,90 @@ Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>%
   geom_bar(stat="identity", width=0.5, fill=zi_cols("zihimmelblau")) + 
   theme_zi_axistitles() + 
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr") + 
-  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugrau")) 
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen")) 
 
 ## ---- fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE----
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
-  ggplot(., aes(x=Jahr,y=Patienten, fill=ifelse(.$Jahr==2013,"blau","grau"))) + 
+  ggplot(., aes(x=Jahr,y=Patienten, fill=ifelse(.$Jahr==2013,"blau","hellblau"))) + 
   geom_bar(stat="identity", width=0.5) + 
-  theme_zi_axistitles() + scale_fill_zi("bluehighlight") +
+  theme_zi_axistitles() + 
+  scale_fill_manual(values=unname(c(
+    zi_cols("zihimmelblau"), zi_cols("zihimmelblauhell")
+  ))) +
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr", fill="") + 
-  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugrau")) 
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen")) 
 
 ## ---- fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE----
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
   summarise(Patienten=sum(Patienten, na.rm=T)/1000) %>% 
-  ggplot(., aes(x=Jahr,y=Patienten, fill=ifelse(.$Jahr==2013,"blau","grau"))) + 
+  ggplot(., aes(x=Jahr,y=Patienten, fill=ifelse(.$Jahr==2013,"blau","hellblau"))) + 
   geom_bar(stat="identity", width=0.5) + 
-  theme_zi_axistitles_horizontal() + scale_fill_zi("bluehighlight") +
+  theme_zi_axistitles_horizontal() + 
+    scale_fill_manual(values=unname(c(
+    zi_cols("zihimmelblau"), zi_cols("zihimmelblauhell")
+  ))) +
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr", fill="") + 
-  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugrau")) +
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen")) +
   coord_flip()
+
+## ---- fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE----
+set.seed(42)
+beispieldaten <- tibble(X=sample(LETTERS[1:4], 1000, replace=TRUE),
+                        G=sample(letters[1:3], 1000, replace=TRUE))
+
+beispieldaten_summed <- beispieldaten %>% 
+  count(X, G)
+
+ggplot(beispieldaten_summed,
+       aes(x=X,
+           y=n,
+           fill=G)) + 
+  geom_bar(stat="identity", width=0.5, color="white") + 
+  scale_fill_manual(values=unname(c(
+    zi_cols("zihimmelblau"),
+    zi_cols("zilindgruen"),
+    zi_cols(("zihimmelblaudunkel"))))) +
+  theme_zi() +
+  labs(fill="", 
+       title="Stacked Bar Chart",
+       subtitle="Anzahl") + 
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen"))
+
+## ---- fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE----
+beispieldaten_summed_withposition <- beispieldaten_summed %>% 
+  group_by(X) %>% 
+  arrange(rev(G), .by_group = TRUE) %>% 
+  mutate(myposition=cumsum(n)-n/2) %>% 
+  ungroup()
+
+ggplot(beispieldaten_summed_withposition,
+       aes(x=X,
+           y=n,
+           fill=G)) + 
+  geom_bar(stat="identity", width=0.4, color="white") + 
+  scale_fill_manual(values=unname(c(
+    zi_cols("zihimmelblau"),
+    zi_cols("zilindgruen"),
+    zi_cols(("zihimmelblaudunkel"))))) +
+  theme_zi() +
+  labs(fill="", 
+       title="Stacked Bar Chart",
+       subtitle="Anzahl") + 
+  geom_text(aes(label=after_stat(y), group=X),
+            stat='summary', fun=sum, vjust = -1,
+            family="Roboto Condensed", fontface="bold", 
+            size=3,
+            color=zi_cols("ziblaugruen")) +
+  geom_text_repel(aes(label=n, y=myposition),
+            family="Roboto Condensed", color=zi_cols("ziblaugruen"),
+            size=3,
+            nudge_x = -0.38,
+            point.padding = 3.5) +
+  theme(axis.text.y = element_blank(),
+        panel.grid.major.y = element_blank()) +
+  coord_cartesian(clip = "off") +
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen"))
 
 ## ---- fig.height = 4.5, fig.width = 7 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
 plotdata <- Darmkrebsvorsorge_Patienten %>% 
@@ -176,7 +242,14 @@ data(iris)
 library(EnvStats) # to display sample sizes
 ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species, color=Species)) + 
   geom_boxplot(lwd=1, fatten=1.5, alpha=.8, show.legend = FALSE) + theme_zi() + 
-  scale_fill_zi("main3colors") + scale_color_zi("main3colors") +  
+    scale_fill_manual(values=unname(c(
+    zi_cols("zihimmelblau"),
+    zi_cols("zilindgruen"),
+    zi_cols(("zihimmelblaudunkel"))))) +
+  scale_color_manual(values=unname(c(
+    zi_cols("zihimmelblau"),
+    zi_cols("zilindgruen"),
+    zi_cols(("zihimmelblaudunkel"))))) +
   labs(title="Iris data: species comparison", subtitle="Sepal length in cm") + 
   ylim(0, NA) +
   stat_n_text(y.expand.factor=0.2, size=3.5, family="Roboto Condensed", color = "#194B5A")

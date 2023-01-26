@@ -2,17 +2,18 @@
 # Note: This Script is heavily inspired by the BBC Style Guide
 
 zi_colors <- c(
-  `zisignalrot`           = rgb(240/255,25/255,75/255),
-  `zilindgruen`           = rgb(45/255,205/255,115/255),
-  `zihimmelblau`          = rgb(60/255,155/255,250/255),
-  `ziblaugruen`           = rgb(25/255,75/255,90/255),
-  `ziblaugruenhell`       = rgb(65/255,130/255,150/255),
-  `zihimmelblauhell`      = rgb(190/255,225/255,255/255),
-  `zihimmelblaudunkel`    = rgb(50/255,105/255,200/255),
-  `zilindgruenhell`       = rgb(190/255,235/255,205/255),
-  `zilindgruendunkel`     = rgb(30/255,145/255,80/255),
-  `ziblaugrau`            = rgb(115/255,145/255,155/255),
-  `ziblaugrauhell`        = rgb(235/255,240/255,240/255)
+  `ziblaugruen`           = rgb(25/255,75/255,90/255), # "#194b5a"
+  `zihimmelblauhell`      = rgb(190/255,225/255,255/255), # "#bee1ff"
+  `zihimmelblau`          = rgb(60/255,155/255,250/255), # "#3c9bfa"
+  `zihimmelblaudunkel`    = rgb(50/255,105/255,200/255), # "#3269c8"
+  `ziblaugruenhell`       = rgb(65/255,130/255,150/255), # "#418296"
+  `zilindgruenhell`       = rgb(190/255,235/255,205/255), # "#beebcd"
+  `zilindgruen`           = rgb(45/255,205/255,115/255), # "#2dcd73"
+  `zilindgruendunkel`     = rgb(30/255,145/255,80/255), # "#1e9150"
+  `zihoniggelb`           = rgb(255/255,185/255,75/255), # "#ffb94b"
+  `zikoralle`             = rgb(240/255,110/255,110/255), # "#f06e6e"
+  `zialtlila`             = rgb(90/255, 80/255, 145/255), # "#5a5091"
+  `zisignalrot`           = rgb(240/255,25/255,75/255) # "#f0194b"
 )
 
 #' Zi Theme based on theme_grey
@@ -179,11 +180,12 @@ zi_cols <- function(...) {
 #' @export
 zi_palettes <- list(
   `main`        = zi_cols("zihimmelblau", "zilindgruen"),
-  `main3colors` = zi_cols("zihimmelblau", "zilindgruen", "ziblaugruen"),
   `shadesofblue`= zi_cols("zihimmelblauhell", "zihimmelblau", "zihimmelblaudunkel"),
   `shadesofgreen`= zi_cols("zilindgruenhell", "zilindgruen", "zilindgruendunkel"), 
-  `bluehighlight`  = zi_cols("zihimmelblau", "ziblaugrauhell"),
-  `divergent`   = zi_cols("zihimmelblau", "ziblaugrauhell", "zilindgruen")
+  `intensity`  = c(zi_cols("zihimmelblau"), "white"),
+  `divergent`   = c(zi_cols("zihimmelblau"), "white", zi_cols("zilindgruen")),
+  `main4colors` = zi_cols("zihimmelblau", "zilindgruen", "zikoralle", "zihoniggelb"),
+  `main5colors` = zi_cols("zihimmelblau", "zilindgruen", "zikoralle", "zihoniggelb", "zialtlila")
 )
 
 # Palette Function
