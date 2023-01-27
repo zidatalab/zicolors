@@ -16,6 +16,7 @@ library("knitr")
 library("kableExtra")
 library("ggrepel")
 library("stringr")
+library("forcats")
 
 ## ----echo=TRUE, eval=FALSE----------------------------------------------------
 #  # Installation des Codes von github
@@ -64,11 +65,11 @@ Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>%
   geom_bar(stat="identity", width=0.5, fill=zi_cols("zihimmelblau")) + 
   theme_zi() + 
   labs(title="Patient*innen mit Früherkennungskoloskopie", subtitle="Anzahl in 1.000") + 
-  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen")) +
-  coord_cartesian(clip ="off") +
-  geom_segment(x = 0.4, xend = 9.5,
-               y = 538, yend = 538,
-               color=zi_cols("ziblaugruen"), size=0.1)
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen")) #+
+  # coord_cartesian(clip ="off") +
+  # geom_segment(x = 0.4, xend = 9.5,
+  #              y = 538, yend = 538,
+  #              color=zi_cols("ziblaugruen"), size=0.1)
 
 ## ---- fig.height = 4.5, fig.width = 7 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
 Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>% 
@@ -254,6 +255,36 @@ ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species, color=Species)) +
   ylim(0, NA) +
   stat_n_text(y.expand.factor=0.2, size=3.5, family="Roboto Condensed", color = "#194B5A")
 
+## ---- fig.height = 4, fig.width = 6, echo=TRUE, message=FALSE, warning=FALSE----
+library(sf)
+
+KRS <- read_sf("../data/shp/kreise.shp")
+BL <- KRS %>%
+  group_by(SN_L) %>%
+  summarise(geometry = sf::st_union(geometry),
+            .groups="drop")
+
+plot_karte_krs_bl <-
+  KRS %>%
+  # mutate(Typ=case_when(
+  #   BEZ %in% c("Landkreis", "Kreis") ~ "Kreis bzw. Landkreis",
+  #   BEZ %in% c("Kreisfreie Stadt", "Stadtkreis") ~ "Kreisfreie Stadt bzw. Stadtkreis",
+  #   TRUE ~ "FEHLER"
+  # )) %>% 
+  mutate(Typ=fct_relevel(BEZ, levels=c("Stadtkreis", "Kreisfreie Stadt", "Landkreis", "Kreis"))) %>%
+  ggplot() +
+  geom_sf(aes(fill=Typ),
+          lwd=0.1, color=zi_cols("ziblaugruenhell")) +
+  geom_sf(data=BL, lwd=0.2, alpha=0, color=zi_cols("ziblaugruen")) +
+  theme_zi_void() +
+  labs(title="Deutschlandkarte",
+       subtitle="unterschiedliche Bezeichungen des Kreistyps",
+       caption="Quelle: © GeoBasis-DE / BKG 2020, http://www.bkg.bund.de",
+       fill="") +
+  scale_fill_zi("divergent")
+
+plot_karte_krs_bl 
+
 ## ---- fig.height = 4, fig.width = 8, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
 plotdata <- Darmkrebsvorsorge_gesamt %>% 
   filter(Jahr %in% c(min(Jahr),max(Jahr))) %>%
@@ -263,7 +294,7 @@ dumbbell_plot <- ggplot(plotdata) +aes(x=str_trunc(Beschreibung,60),
                                        y=Patienten/1000000,
                                        color=Jahr, 
                                        group=GOP) + 
-  geom_line(color=zi_cols("ziblaugrauhell"), linewidth=3) +
+  geom_line(color=zi_cols("zisignalrot"), linewidth=1.5) +
   geom_point(size=4) + 
   labs(title="GOPen zur Darmkrebsvorsorge",
        subtitle="Anzahl in Mio. Patient*innen im Jahresvergleich",
@@ -282,7 +313,7 @@ ggsave("data/dumbbell.png",
        width=16, height=9,
        units="cm", dpi=300)
 
-## ----include=TRUE, echo=TRUE--------------------------------------------------
+## ----echo=TRUE, message=FALSE, warning=FALSE, include=TRUE--------------------
 library(magick)
 finalise_plot_logolinks(plot_name = dumbbell_plot,
                         source_name = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
@@ -291,7 +322,7 @@ finalise_plot_logolinks(plot_name = dumbbell_plot,
                         save_filepath = "data/dumbbell_logolinks.png"
 )
 
-## ----include=TRUE, echo=TRUE--------------------------------------------------
+## ----echo=TRUE, message=FALSE, warning=FALSE, include=TRUE--------------------
 library(magick)
 finalise_plot_logorechts(plot_name = dumbbell_plot,
                          source_name = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",

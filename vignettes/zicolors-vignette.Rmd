@@ -39,6 +39,7 @@ library("knitr")
 library("kableExtra")
 library("ggrepel")
 library("stringr")
+library("forcats")
 ```
 ```{r echo=TRUE, eval=FALSE}
 # Installation des Codes von github
@@ -48,7 +49,7 @@ devtools::install_github("zidatalab/zicolors")
 
 # Einbindung des Stiles
 
-Zur Anwendung und Installation müssen die R-Pakete `tidyverse`, `devtools` und `showtext` verfügbar sein. Weitere optionale Pakete sind `ggrepel` (für Labels), `kableExtra` (für Tabellen), sowie `magick` (zum Hinzufügen des Zi-Logos).
+Zur Anwendung und Installation müssen die R-Pakete `tidyverse`, `devtools` und `showtext` verfügbar sein. Weitere optionale Pakete sind `ggrepel` (für Labels in Plots), `kableExtra` (für Tabellen), `sf` (für Karten), sowie `magick` (zum Hinzufügen des Zi-Logos).
 
 ## Libraries
 
@@ -141,11 +142,11 @@ Darmkrebsvorsorge_gesamt %>% filter(GOP=="01741") %>% group_by(Jahr) %>%
   geom_bar(stat="identity", width=0.5, fill=zi_cols("zihimmelblau")) + 
   theme_zi() + 
   labs(title="Patient*innen mit Früherkennungskoloskopie", subtitle="Anzahl in 1.000") + 
-  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen")) +
-  coord_cartesian(clip ="off") +
-  geom_segment(x = 0.4, xend = 9.5,
-               y = 538, yend = 538,
-               color=zi_cols("ziblaugruen"), size=0.1)
+  geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen")) #+
+  # coord_cartesian(clip ="off") +
+  # geom_segment(x = 0.4, xend = 9.5,
+  #              y = 538, yend = 538,
+  #              color=zi_cols("ziblaugruen"), size=0.1)
 ```
 
 
@@ -378,6 +379,41 @@ ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species, color=Species)) +
   stat_n_text(y.expand.factor=0.2, size=3.5, family="Roboto Condensed", color = "#194B5A")
 ```
 
+## Kartendarstellung
+
+Mit dem Package `sf` lassen sich Karten darstellen. Voraussetzung sind entsprechende "shape"-Dateien. Für Deutschland sind die shape-Dateien der deutschen Landkreise und Bundesländer im zicolors-Package hinterlegt (Quelle: © GeoBasis-DE / BKG 2020, http://www.bkg.bund.de), die Quelle muss nach den Lizenzbestimmungen immer angegeben werden!
+
+```{r, fig.height = 4, fig.width = 6, echo=TRUE, message=FALSE, warning=FALSE}
+library(sf)
+
+KRS <- read_sf("../data/shp/kreise.shp")
+BL <- KRS %>%
+  group_by(SN_L) %>%
+  summarise(geometry = sf::st_union(geometry),
+            .groups="drop")
+
+plot_karte_krs_bl <-
+  KRS %>%
+  # mutate(Typ=case_when(
+  #   BEZ %in% c("Landkreis", "Kreis") ~ "Kreis bzw. Landkreis",
+  #   BEZ %in% c("Kreisfreie Stadt", "Stadtkreis") ~ "Kreisfreie Stadt bzw. Stadtkreis",
+  #   TRUE ~ "FEHLER"
+  # )) %>% 
+  mutate(Typ=fct_relevel(BEZ, levels=c("Stadtkreis", "Kreisfreie Stadt", "Landkreis", "Kreis"))) %>%
+  ggplot() +
+  geom_sf(aes(fill=Typ),
+          lwd=0.1, color=zi_cols("ziblaugruenhell")) +
+  geom_sf(data=BL, lwd=0.2, alpha=0, color=zi_cols("ziblaugruen")) +
+  theme_zi_void() +
+  labs(title="Deutschlandkarte",
+       subtitle="unterschiedliche Bezeichungen des Kreistyps",
+       caption="Quelle: © GeoBasis-DE / BKG 2020, http://www.bkg.bund.de",
+       fill="") +
+  scale_fill_zi("divergent")
+
+plot_karte_krs_bl 
+```
+
 
 ## Visualisierung von Veränderungen
 
@@ -392,7 +428,7 @@ dumbbell_plot <- ggplot(plotdata) +aes(x=str_trunc(Beschreibung,60),
                                        y=Patienten/1000000,
                                        color=Jahr, 
                                        group=GOP) + 
-  geom_line(color=zi_cols("ziblaugrauhell"), linewidth=3) +
+  geom_line(color=zi_cols("zisignalrot"), linewidth=1.5) +
   geom_point(size=4) + 
   labs(title="GOPen zur Darmkrebsvorsorge",
        subtitle="Anzahl in Mio. Patient*innen im Jahresvergleich",
@@ -425,7 +461,7 @@ Mithilfe der Funktionen `finalise_plot_logorechts` / `finalise_plot_logolinks` u
 
 Syntax für Logo links:
 
-```{r include=TRUE, echo=TRUE}
+```{r echo=TRUE, message=FALSE, warning=FALSE, include=TRUE}
 library(magick)
 finalise_plot_logolinks(plot_name = dumbbell_plot,
                         source_name = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
@@ -438,7 +474,7 @@ finalise_plot_logolinks(plot_name = dumbbell_plot,
 
 Sollte das Logo rechts stehen (wenn links nicht genug Freiraum ist, weil z.B. die Legende im Weg ist), wird die Syntax für die Platzierung des Logos etwas komplexer, weil die Quellenangabe etwas links vom Logo stehen sollte. Eventuell muss hier mit dem Parameter `hjust_source` zwischen 0 und 1 experimentiert werden:
 
-```{r include=TRUE, echo=TRUE}
+```{r echo=TRUE, message=FALSE, warning=FALSE, include=TRUE}
 library(magick)
 finalise_plot_logorechts(plot_name = dumbbell_plot,
                          source_name = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
