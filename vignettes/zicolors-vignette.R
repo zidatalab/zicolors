@@ -294,7 +294,7 @@ dumbbell_plot <- ggplot(plotdata) +aes(x=str_trunc(Beschreibung,60),
                                        y=Patienten/1000000,
                                        color=Jahr, 
                                        group=GOP) + 
-  geom_line(color=zi_cols("zisignalrot"), linewidth=1.5) +
+  geom_line(color=zi_cols("ziblaugruenhell"), linewidth=1.5) +
   geom_point(size=4) + 
   labs(title="GOPen zur Darmkrebsvorsorge",
        subtitle="Anzahl in Mio. Patient*innen im Jahresvergleich",
