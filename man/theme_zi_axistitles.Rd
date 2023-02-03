@@ -4,7 +4,7 @@
 \alias{theme_zi_axistitles}
 \title{Zi Theme with axis and labels based on theme_zi() optimal suited to print maps.}
 \usage{
-theme_zi_axistitles(fontsize = 10, font = "Roboto Condensed")
+theme_zi_axistitles(fontsize = 10, font = NULL)
 }
 \arguments{
 \item{Define}{a base_size (Defaults to 12) and base_family for Fonts used (defaults to ggplot2's defaults)}
@@ -14,7 +14,9 @@ Zi Theme with axis and labels based on theme_zi() optimal suited to print maps.
 }
 \examples{
 \dontrun{
-ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zi_void()
+ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) + 
+geom_point() +
+theme_zi_void(font=myfamily)
 }
 }
 \keyword{theme}

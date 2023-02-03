@@ -4,7 +4,7 @@
 \alias{theme_zi}
 \title{Zi Theme based on theme_grey}
 \usage{
-theme_zi(fontsize = 10, font = "Roboto Condensed")
+theme_zi(fontsize = 10, font = NULL)
 }
 \arguments{
 \item{Define}{a base_size (Defaults to 10) and base_family and bold_family for Fonts used (defaults to ggplot2's defaults)}
@@ -15,9 +15,16 @@ Zi Theme based on theme_grey
 \examples{
 \dontrun{
 library(showtext)
-font_add_google(name = "Roboto Condensed", family = "Roboto Condensed")
+myfamily <- "TT Norms Pro Condensed"
+font_add(family=myfamily,
+         regular="G:/93 Repository_Software/Lizenzpflichtig/myfonts_ttnormspro/TTNormsProCond-Rg.ttf")
 showtext_auto()
-ggplot(as.data.frame(Titanic) \%>\% group_by(Class) \%>\% summarise(n=sum(Freq)), aes(x=Class,  y=n)) + geom_bar(stat="identity" , fill=zi_cols("zihimmelblau")) +  theme_zi() 
+ggplot(as.data.frame(Titanic) \%>\% 
+group_by(Class) \%>\% 
+summarise(n=sum(Freq)), aes(x=Class,  y=n)) + 
+geom_bar(stat="identity" , 
+fill=zi_cols("zihimmelblau")) + 
+theme_zi(font=myfamily) 
 }
 }
 \keyword{theme}

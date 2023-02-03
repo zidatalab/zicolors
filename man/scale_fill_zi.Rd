@@ -14,7 +14,7 @@ Zi fill scale for ggplot2 with different palettes
 }
 \examples{
 \dontrun{
-ggplot(iris, aes(x=Species,y=Sepal.Width, fill = Species)) +   geom_bar(stat = "summary", fun.y = "mean") +  theme_zi() + scale_fill_zi()
+ggplot(iris, aes(x=Species,y=Sepal.Width, fill = Species)) +   geom_bar(stat = "summary", fun.y = "mean") +  theme_zi(font=myfamily) + scale_fill_zi()
 }
 }
 \keyword{custom_scale_color()}

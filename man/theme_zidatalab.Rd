@@ -4,7 +4,7 @@
 \alias{theme_zidatalab}
 \title{Zi Datalab Theme with grey bg axis and labels based on theme_zi() optimal suited to print maps.}
 \usage{
-theme_zidatalab(fontsize = 10, font = "Roboto Condensed")
+theme_zidatalab(fontsize = 10, font = NULL)
 }
 \arguments{
 \item{Define}{a base_size (Defaults to 12) and base_family for Fonts used (defaults to ggplot2's defaults)}
@@ -14,7 +14,9 @@ Zi Datalab Theme with grey bg axis and labels based on theme_zi() optimal suited
 }
 \examples{
 \dontrun{
-ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zidatalab() +  scale_color_zi()
+ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
+geom_point() +
+theme_zidatalab(font=myfamily) +  scale_color_zi()
 }
 }
 \keyword{theme}
