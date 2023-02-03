@@ -24,12 +24,19 @@ zi_colors <- c(
 #' @examples
 #' \dontrun{
 #' library(showtext)
-#' font_add_google(name = "Roboto Condensed", family = "Roboto Condensed")
+#' myfamily <- "TT Norms Pro Condensed"
+#' font_add(family=myfamily,
+#'          regular="G:/93 Repository_Software/Lizenzpflichtig/myfonts_ttnormspro/TTNormsProCond-Rg.ttf")
 #' showtext_auto()
-#' ggplot(as.data.frame(Titanic) %>% group_by(Class) %>% summarise(n=sum(Freq)), aes(x=Class,  y=n)) + geom_bar(stat="identity" , fill=zi_cols("zihimmelblau")) +  theme_zi() 
+#' ggplot(as.data.frame(Titanic) %>% 
+#' group_by(Class) %>% 
+#' summarise(n=sum(Freq)), aes(x=Class,  y=n)) + 
+#' geom_bar(stat="identity" , 
+#' fill=zi_cols("zihimmelblau")) + 
+#' theme_zi(font=myfamily) 
 #' }
 
-theme_zi <- function(fontsize=10, font = "Roboto Condensed") {
+theme_zi <- function(fontsize=10, font = NULL) {
   
   ggplot2::theme(
     
@@ -82,10 +89,12 @@ theme_zi <- function(fontsize=10, font = "Roboto Condensed") {
 #' @export
 #' @examples
 #' \dontrun{
-#' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zi_void()
+#' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) + 
+#' geom_point() +
+#' theme_zi_void(font=myfamily)
 #' }
 
-theme_zi_axistitles <- function (fontsize=10, font = "Roboto Condensed") {
+theme_zi_axistitles <- function (fontsize=10, font = NULL) {
   theme_zi(fontsize=fontsize, font = font) +
     theme(axis.title = element_text(size=fontsize, face="bold"),
           axis.title.y = ggplot2::element_text(margin = margin(t = 0, r = 10, b = 0, l = 0)),
@@ -99,7 +108,7 @@ theme_zi_axistitles <- function (fontsize=10, font = "Roboto Condensed") {
 #' @keywords theme
 #' @export
 
-theme_zi_horizontal <- function (fontsize=10, font = "Roboto Condensed") {
+theme_zi_horizontal <- function (fontsize=10, font = NULL) {
   theme_zi(fontsize=fontsize, font = font) +
     theme(panel.grid.major.x =   element_line(color = "#ebf0f0"),
           panel.grid.major.y = element_blank()) 
@@ -112,7 +121,7 @@ theme_zi_horizontal <- function (fontsize=10, font = "Roboto Condensed") {
 #' @keywords theme
 #' @export
 
-theme_zi_axistitles_horizontal <- function (fontsize=10, font = "Roboto Condensed") {
+theme_zi_axistitles_horizontal <- function (fontsize=10, font = NULL) {
   theme_zi_axistitles(fontsize=fontsize, font = font) +
     theme(panel.grid.major.x =   element_line(color = "#ebf0f0"),
           panel.grid.major.y = element_blank()) 
@@ -126,10 +135,12 @@ theme_zi_axistitles_horizontal <- function (fontsize=10, font = "Roboto Condense
 #' @export
 #' @examples
 #' \dontrun{
-#' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zi_void()
+#' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
+#' geom_point() +
+#' theme_zi_void(font=myfamily)
 #' }
 
-theme_zi_void <- function (fontsize=10, font = "Roboto Condensed") {
+theme_zi_void <- function (fontsize=10, font = NULL) {
   theme_zi(fontsize=fontsize,font = font) +
     theme(panel.grid.major.y = element_blank(),
           axis.text.x =  element_blank(),
@@ -151,11 +162,13 @@ theme_zi_void <- function (fontsize=10, font = "Roboto Condensed") {
 #' @export
 #' @examples
 #' \dontrun{
-#' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zidatalab() +  scale_color_zi()
+#' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
+#' geom_point() +
+#' theme_zidatalab(font=myfamily) +  scale_color_zi()
 #' }
 
 
-theme_zidatalab <- function (fontsize=10, font = "Roboto Condensed") {
+theme_zidatalab <- function (fontsize=10, font = NULL) {
   theme_zi(fontsize=fontsize, font = font) +
     theme(panel.grid.major.y = ggplot2::element_line(color="#ebf0f0"),
           panel.background = ggplot2::element_rect(fill="white"),
@@ -204,7 +217,7 @@ zi_pal <- function(palette = "main", reverse = FALSE, ...) {
 #' @export
 #' @examples
 #' \dontrun{
-#' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zi() + scale_color_zi()
+#' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zi(font=myfamily) + scale_color_zi()
 #' }
 
 scale_color_zi <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
@@ -225,7 +238,7 @@ scale_color_zi <- function(palette = "main", discrete = TRUE, reverse = FALSE, .
 #' @export
 #' @examples
 #' \dontrun{
-#' ggplot(iris, aes(x=Species,y=Sepal.Width, fill = Species)) +   geom_bar(stat = "summary", fun.y = "mean") +  theme_zi() + scale_fill_zi()
+#' ggplot(iris, aes(x=Species,y=Sepal.Width, fill = Species)) +   geom_bar(stat = "summary", fun.y = "mean") +  theme_zi(font=myfamily) + scale_fill_zi()
 #' }
 
 scale_fill_zi  <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
