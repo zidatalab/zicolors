@@ -9,7 +9,14 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-```{r, echo=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(dev.args = list(png = list(type = "cairo")), # dpi=300,
+                      fig.width = 7,
+                      fig.height = 4,
+                      fig.align = "center")
+```
+
+```{r logoforhtml, echo=FALSE}
 htmltools::img(src = knitr::image_uri(file.path("../data/logo_zi.png")), 
                alt = 'logo', 
                width = '256' , 
@@ -28,7 +35,7 @@ Der Stil orientiert sich an einem vergleichbaren Stil der [BBC](https://bbc.gith
 
 Die Installation des Stiles erfolgt anhand eines im Netzwerk bereitgestellten Paketes mit dem Paket `devtools` von R.
 
-```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r loadlibraries,echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
 
 library("devtools")
 library("ggplot2")
@@ -41,7 +48,10 @@ library("ggrepel")
 library("stringr")
 library("forcats")
 ```
-```{r echo=TRUE, eval=FALSE}
+```{r installpackage, echo=TRUE, eval=FALSE}
+# Installation des Codes von lokal
+install_local("G:/93 Repository_Software/R_Packages/r_library_zi/zicolors")
+
 # Installation des Codes von github
 devtools::install_github("zidatalab/zicolors")
 ```
@@ -53,14 +63,14 @@ Zur Anwendung und Installation müssen die R-Pakete `tidyverse`, `devtools` und 
 
 ## Libraries
 
-```{r echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r loadzicolors, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library("zicolors")
 ```
 
 
 Wenn die Hausschriftart TT Norms Pro installiert ist (auf einem Zi-Windows-Gerät), kann diese direkt vom Speicherort eingebunden werden. Wird auf einem Gerät ohne diese installierte Schriftart gearbeitet, sollte (eine Internetverbindung vorausgesetzt) die Fallback-Schrift "Roboto Condensed" von Google Fonts geladen werden. Falls dies auch nicht möglich ist, muss die Standardschriftart verwendet werden.
 
-```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r loadfonts, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
 # Prepare fonts
 library("showtext")
 
@@ -84,7 +94,7 @@ Als Beispieldaten für die vorliegenden Analysen wird ein aggregierter Auszug au
 
 Es werden zwei Tabellen importiert, die in der mit dem Paket mitgelieferten MS Excel Datei als Reiter implementiert wurden.
 
-```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r getdarmkrebsdata, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
 Darmkrebsvorsorge_gesamt <- 
   readxl::read_excel("../data/Darmkrebsvorsorge Anzahl Patienten.xlsx",     
                      sheet = "GOP 01730-01748") %>%
@@ -133,7 +143,7 @@ Anhand der ggplot2-Skalen `scale_fill_zi(PALETTENNAME)` und  `scale_color_zi(PAL
 
 ### Übersicht
 
-```{r,  fig.height = 3, fig.width = 6, fig.align ="left",caption="Übersicht über alle Farbskalen" ,echo=TRUE, message=FALSE, warning=FALSE}
+```{r plotpalettes, caption="Übersicht über alle Farbskalen", echo=TRUE, message=FALSE, warning=FALSE}
 n_col <- 128
 img <- function(obj, nam) {
   image(1:length(obj), 1, as.matrix(1:length(obj)), col=obj, 
@@ -160,7 +170,7 @@ Wichtig ist, dass beim einfachen Balkendiagramm im Standard keine Achsenbeschrif
 
 Außerdem sollte nach dem Corporate Design die Breite der Säulen verringert werden (z.B. hier mit `width=0.5` innerhalb von `geom_bar()`), sowie eine Grundlinie hinzugefügt werden (mit `geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen"))`).
 
-```{r , fig.height = 4.5, fig.width = 5 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
+```{r balkendiagramm, echo=TRUE, message=FALSE, warning=FALSE}
 Darmkrebsvorsorge_01741 <- Darmkrebsvorsorge_gesamt %>%
   filter(GOP=="01741") %>% 
   group_by(Jahr) %>% 
@@ -185,7 +195,7 @@ ggplot(Darmkrebsvorsorge_01741,
 Generell ist die oben beschriebene Art ohne Achsentitel vorzuziehen. Falls das nicht möglich ist (z.B. bei Grafiken ohne Titel), sollte das alternative Thema `theme_zi_axistitles()` verwendet werden, dass Achsenbeschriftungen enthält.
 
 
-```{r , fig.height = 4.5, fig.width = 7 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
+```{r balken_axistitles, echo=TRUE, message=FALSE, warning=FALSE}
 ggplot(Darmkrebsvorsorge_01741,
        aes(x=Jahr,y=Patienten)) + 
   geom_bar(stat="identity", width=0.5, fill=zi_cols("zihimmelblau")) + 
@@ -199,7 +209,7 @@ ggplot(Darmkrebsvorsorge_01741,
 
 Ein einzelner Balken lässt sich durch Einfügen einer `ifelse()` Bedingung hervorheben.
 
-```{r , fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE}
+```{r baken_hervorhebung, echo=TRUE, message=FALSE, warning=FALSE}
 ggplot(Darmkrebsvorsorge_01741,
        aes(x=Jahr,y=Patienten,
            fill=ifelse(Jahr=="2013","blau","hellblau"))) + 
@@ -214,7 +224,7 @@ ggplot(Darmkrebsvorsorge_01741,
 
 Der gleiche Plot mit horizontaler Ausrichtung:
 
-```{r , fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE}
+```{r balken_horizontal, echo=TRUE, message=FALSE, warning=FALSE}
 ggplot(Darmkrebsvorsorge_01741,
        aes(x=Jahr,y=Patienten, 
            fill=ifelse(Jahr=="2013","blau","hellblau"))) + 
@@ -232,7 +242,7 @@ ggplot(Darmkrebsvorsorge_01741,
 
 Hierbei handelt es sich um ein Balkendiagramm mit einer Gruppierung innerhalb der Balken. Durch das Corporate Design sind standardmäßig nur zwei qualitativ unterschiedliche Gruppen möglich (mit den Hauptfarben `zi_cols("zihimmelblau")` und `zi_cols("zilindgruen")`). Sollten mehr Farben benötigt werden, müssen diese manuell mit `scale_fill_manual()` (bzw. `scale_color_manual()`) und der benötigten Anzahl von verfügbaren `zi_cols()` ausgewählt werden. 
 
-```{r, fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE}
+```{r balken_stacked, echo=TRUE, message=FALSE, warning=FALSE}
 set.seed(42)
 beispieldaten <- tibble(X=sample(LETTERS[1:4], 1000, replace=TRUE),
                         G=sample(letters[1:3], 1000, replace=TRUE))
@@ -258,7 +268,7 @@ ggplot(beispieldaten_summed,
 
 Zusätzlich können die Gesamtzahlen in fett über den Balken erscheinen, sowie die Anzahlen der einzelnen Gruppen als Labels neben den Balken. Die Hilfslinien und die y-Achse werden dann nicht mehr benötigt! Auf jeden Fall muss aber mit verschiedenen Parametern experimentiert werden, insbesondere mit der Balkenbreite `width` innerhalb `geom_bar()`, mit der Schriftgröße `size` der Zahlenlabels innerhalb `geom_text` sowie ebendort mit `nudge_x` und `point.padding` für die Länge der Linien.
 
-```{r, fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE}
+```{r balken_stacked_famos, echo=TRUE, message=FALSE, warning=FALSE}
 beispieldaten_summed_withposition <- beispieldaten_summed %>% 
   group_by(X) %>% 
   arrange(rev(G), .by_group = TRUE) %>% 
@@ -300,7 +310,7 @@ Für die Darstellung von Zeitreihen bietet sich im Allgemeinen eher ein Liniendi
 
 Generell gilt für eine "gute" Grafik", dass überflüssiges und doppeltes vermieden wird: Hier ist es z.B. überflüssig, der Legende den Titel "Geschlecht" voranzustellen (mit `color=""` innerhalb von `labs()`).
 
-```{r , fig.height = 4.5, fig.width = 7 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
+```{r liniendiagramm, echo=TRUE, message=FALSE, warning=FALSE}
 plotdata <- Darmkrebsvorsorge_Patienten %>% 
   mutate(Geschlecht=as.character(Geschlecht)) %>% 
   filter(Geschlecht %in% c("männlich","weiblich")) %>%
@@ -320,7 +330,7 @@ ggplot(plotdata, aes(x=Jahr,y=Patienten, color=Geschlecht, group=Geschlecht)) +
 
 Empfohlen ist es aber hier, die Legenden-Labels direkt in den Plot zu integrieren. Die Labels wurden im Plot mit dem Paket `ggrepel` und der Funktion `geom_text_repel` gesetzt, um eine Überschneidung mit den Daten zu verhindern. Die Legende wird dann nicht mehr benötigt (`legend.position = "none"` innerhalb von `theme()`). Eventuell muss mit den Parametern innerhalb von `geom_text_repel` experimentiert werden.
 
-```{r , fig.height = 4.5, fig.width = 7 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
+```{r liniendiagramm_labels, echo=TRUE, message=FALSE, warning=FALSE}
 ggplot(plotdata, aes(x=Jahr,y=Patienten,
                      color=Geschlecht, group=Geschlecht, label=Geschlecht)) + 
   geom_line(size=2) +  
@@ -344,7 +354,7 @@ ggplot(plotdata, aes(x=Jahr,y=Patienten,
 
 Um Teilgruppen zu vergleichen, sollte am besten die facet-Funktion (`facet_wrap()` oder `facet_grid()`) genutzt werden. Hier ist es besser, einmal die Legende zu plotten als an jeder Facet die Labels zu verwenden (doppeltes soll vermieden werden).
 
-```{r , fig.height = 5.5, fig.width = 7 , fig.align ="left" , echo=TRUE, message=FALSE, warning=FALSE}
+```{r liniendiagramm_facets, echo=TRUE, message=FALSE, warning=FALSE}
 plotdata <- Darmkrebsvorsorge_Patienten %>% 
   mutate(Geschlecht=as.character(Geschlecht),
          Alter = as.character(Alter)) %>% 
@@ -368,7 +378,7 @@ ggplot(plotdata, aes(x=Jahr,y=Patienten, color=Geschlecht, group=Geschlecht)) +
 
 Etwas komplexer ist die Darstellung der Kaplan-Meier-Kurven bei einer Survivalanalyse. Folgender Code gibt ein Beispiel für die Adaption eines solchen Plots mit dem Paket `survminer` und dem Beispieldatensatz `ovarian`:
 
-```{r, fig.height = 5, fig.width = 7, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
+```{r plot_kaplanmeier, echo=TRUE, message=FALSE, warning=FALSE}
 library(survival)
 # data(ovarian)
 library(survminer)
@@ -388,7 +398,7 @@ ggplot(ggsp_data) + aes(x=time,color=ifelse(strata=="rx=1","Gruppe 1", "Gruppe 2
 
 Boxplots sind besonders geeignet für den Vergleich von Gruppen, wenn nominalskalierte Variablen verglichen werden sollen (und sind oft gegenüber Balkendiagrammen oder Dynamiteplots vorzuziehen).
 
-```{r, fig.height = 4, fig.width = 6, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
+```{r boxplots, echo=TRUE, message=FALSE, warning=FALSE}
 # data(iris)
 library(EnvStats) # to display sample sizes
 ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species, color=Species)) + 
@@ -412,7 +422,7 @@ ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species, color=Species)) +
 
 Mit dem Package `sf` lassen sich Karten darstellen. Voraussetzung sind entsprechende "shape"-Dateien. Für Deutschland sind die shape-Dateien der deutschen Landkreise und Bundesländer im zicolors-Package hinterlegt (Quelle: © GeoBasis-DE / BKG 2020, http://www.bkg.bund.de), die Quelle muss nach den Lizenzbestimmungen immer angegeben werden!
 
-```{r, fig.height = 4, fig.width = 6, echo=TRUE, message=FALSE, warning=FALSE}
+```{r karte, echo=TRUE, message=FALSE, warning=FALSE}
 library(sf)
 
 KRS <- read_sf("../data/shp/kreise.shp")
@@ -448,7 +458,7 @@ plot_karte_krs_bl
 
 Um Veränderungen zu visualisieren bieten sich sog. dumbbell charts an. Sie zeigen für heterogene Outcomes Veränderungen zwischen zwei Zeitpunkten an. Wichtig ist bei der Konstruktion darauf zu achten, zuerst die Verbindunglinie und anschließend die Punkte zu definieren. Um Labels besser lesbar zu machen, wurde der Plot mit `coord_flip()` gekippt und die Labels mit `stringr::str_trunc()` gekürzt.
 
-```{r, fig.height = 4, fig.width = 8, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
+```{r plot_dumbbell, echo=TRUE, message=FALSE, warning=FALSE}
 plotdata <- Darmkrebsvorsorge_gesamt %>% 
   filter(Jahr %in% c(min(Jahr),max(Jahr))) %>%
   filter(!is.na(Patienten))
@@ -472,7 +482,7 @@ dumbbell_plot
 
 Soll einer Grafik die Quelle/Datengrundlage hinzugefügt werden, kann das direkt in `ggplot2` mit einer `caption` erledigt werden. Die Quelle steht automatisch wie vom Coroporate Design verlangt unten rechts. Diese Form ist die Grundlage für die Grafik des Monats und kann in druckfähiger Auflösung (300 dpi) mit `ggsave()` gespeichert werden, dafür muss allerdings vorher mit `showtext_opts(dpi = 300)` sichergestellt werden, dass die geladene Schriftart richtig in die Grafik integriert wird:
 
-```{r, fig.height = 4, fig.width = 8, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE}
+```{r dumbbell_caption, echo=TRUE, message=FALSE, warning=FALSE}
 dumbbell_plot_mitcaption <- dumbbell_plot +
   labs(caption="Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.")
 
@@ -492,7 +502,7 @@ Mithilfe der Funktionen `finalise_plot_logorechts` / `finalise_plot_logolinks` u
 
 Syntax für Logo links:
 
-```{r echo=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+```{r dumbbell_logolinks, echo=TRUE, message=FALSE, warning=FALSE, include=TRUE}
 library(magick)
 finalise_plot_logolinks(plot_name = dumbbell_plot,
                         source_name = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
@@ -505,7 +515,7 @@ finalise_plot_logolinks(plot_name = dumbbell_plot,
 
 Sollte das Logo rechts stehen (wenn links nicht genug Freiraum ist, weil z.B. die Legende im Weg ist), wird die Syntax für die Platzierung des Logos etwas komplexer, weil die Quellenangabe etwas links vom Logo stehen sollte. Eventuell muss hier mit dem Parameter `hjust_source` zwischen 0 und 1 experimentiert werden:
 
-```{r echo=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+```{r dumbbell_logorechts, echo=TRUE, message=FALSE, warning=FALSE, include=TRUE}
 library(magick)
 finalise_plot_logorechts(plot_name = dumbbell_plot,
                          source_name = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",

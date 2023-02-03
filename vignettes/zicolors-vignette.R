@@ -1,11 +1,17 @@
-## ---- echo=FALSE--------------------------------------------------------------
+## ----setup, include=FALSE-----------------------------------------------------
+knitr::opts_chunk$set(dev.args = list(png = list(type = "cairo")), # dpi=300,
+                      fig.width = 7,
+                      fig.height = 4,
+                      fig.align = "center")
+
+## ----logoforhtml, echo=FALSE--------------------------------------------------
 htmltools::img(src = knitr::image_uri(file.path("../data/logo_zi.png")), 
                alt = 'logo', 
                width = '256' , 
                style = 'position:absolute; top:0; right:0; padding:10px;'
 )
 
-## ----echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE---------------
+## ----loadlibraries,echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE----
 
 library("devtools")
 library("ggplot2")
@@ -18,14 +24,17 @@ library("ggrepel")
 library("stringr")
 library("forcats")
 
-## ----echo=TRUE, eval=FALSE----------------------------------------------------
+## ----installpackage, echo=TRUE, eval=FALSE------------------------------------
+#  # Installation des Codes von lokal
+#  install_local("G:/93 Repository_Software/R_Packages/r_library_zi/zicolors")
+#  
 #  # Installation des Codes von github
 #  devtools::install_github("zidatalab/zicolors")
 
-## ----echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE----
+## ----loadzicolors, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE----
 library("zicolors")
 
-## ----echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE---------------
+## ----loadfonts, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE----
 # Prepare fonts
 library("showtext")
 
@@ -41,7 +50,7 @@ font_add(family=myfamily,
 
 showtext_auto()
 
-## ----echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE---------------
+## ----getdarmkrebsdata, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE----
 Darmkrebsvorsorge_gesamt <- 
   readxl::read_excel("../data/Darmkrebsvorsorge Anzahl Patienten.xlsx",     
                      sheet = "GOP 01730-01748") %>%
@@ -69,7 +78,7 @@ Darmkrebsvorsorge_Patienten %>%
   kable_styling() %>%
   row_spec(0, bold = T, color = "white", background = zi_cols("ziblaugruen"))
 
-## ----  fig.height = 3, fig.width = 6, fig.align ="left",caption="Übersicht über alle Farbskalen" ,echo=TRUE, message=FALSE, warning=FALSE----
+## ----plotpalettes, caption="Übersicht über alle Farbskalen", echo=TRUE, message=FALSE, warning=FALSE----
 n_col <- 128
 img <- function(obj, nam) {
   image(1:length(obj), 1, as.matrix(1:length(obj)), col=obj, 
@@ -83,7 +92,7 @@ img(zi_pal("shadesofgreen")(n_col), "shadesofgreen")
 img(zi_pal("intensity")(n_col), "intensity")
 img(zi_pal("divergent")(n_col), "divergent")
 
-## ---- fig.height = 4.5, fig.width = 5 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
+## ----balkendiagramm, echo=TRUE, message=FALSE, warning=FALSE------------------
 Darmkrebsvorsorge_01741 <- Darmkrebsvorsorge_gesamt %>%
   filter(GOP=="01741") %>% 
   group_by(Jahr) %>% 
@@ -101,7 +110,7 @@ ggplot(Darmkrebsvorsorge_01741,
 #              y = 538, yend = 538,
 #              color=zi_cols("ziblaugruen"), size=0.1)
 
-## ---- fig.height = 4.5, fig.width = 7 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
+## ----balken_axistitles, echo=TRUE, message=FALSE, warning=FALSE---------------
 ggplot(Darmkrebsvorsorge_01741,
        aes(x=Jahr,y=Patienten)) + 
   geom_bar(stat="identity", width=0.5, fill=zi_cols("zihimmelblau")) + 
@@ -110,7 +119,7 @@ ggplot(Darmkrebsvorsorge_01741,
        x="Jahr") + 
   geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen")) 
 
-## ---- fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE----
+## ----baken_hervorhebung, echo=TRUE, message=FALSE, warning=FALSE--------------
 ggplot(Darmkrebsvorsorge_01741,
        aes(x=Jahr,y=Patienten,
            fill=ifelse(Jahr=="2013","blau","hellblau"))) + 
@@ -122,7 +131,7 @@ ggplot(Darmkrebsvorsorge_01741,
   labs(y="Früherkennungskoloskopie\nAnzahl in Tsd.", x="Jahr", fill="") + 
   geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen")) 
 
-## ---- fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE----
+## ----balken_horizontal, echo=TRUE, message=FALSE, warning=FALSE---------------
 ggplot(Darmkrebsvorsorge_01741,
        aes(x=Jahr,y=Patienten, 
            fill=ifelse(Jahr=="2013","blau","hellblau"))) + 
@@ -135,7 +144,7 @@ ggplot(Darmkrebsvorsorge_01741,
   geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen")) +
   coord_flip()
 
-## ---- fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE----
+## ----balken_stacked, echo=TRUE, message=FALSE, warning=FALSE------------------
 set.seed(42)
 beispieldaten <- tibble(X=sample(LETTERS[1:4], 1000, replace=TRUE),
                         G=sample(letters[1:3], 1000, replace=TRUE))
@@ -158,7 +167,7 @@ ggplot(beispieldaten_summed,
        subtitle="Anzahl") + 
   geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen"))
 
-## ---- fig.height = 4.5, fig.width = 7 , echo=TRUE, message=FALSE, warning=FALSE----
+## ----balken_stacked_famos, echo=TRUE, message=FALSE, warning=FALSE------------
 beispieldaten_summed_withposition <- beispieldaten_summed %>% 
   group_by(X) %>% 
   arrange(rev(G), .by_group = TRUE) %>% 
@@ -193,7 +202,7 @@ ggplot(beispieldaten_summed_withposition,
   coord_cartesian(clip = "off") +
   geom_hline(yintercept = 0, size=0.5, col=zi_cols("ziblaugruen"))
 
-## ---- fig.height = 4.5, fig.width = 7 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
+## ----liniendiagramm, echo=TRUE, message=FALSE, warning=FALSE------------------
 plotdata <- Darmkrebsvorsorge_Patienten %>% 
   mutate(Geschlecht=as.character(Geschlecht)) %>% 
   filter(Geschlecht %in% c("männlich","weiblich")) %>%
@@ -210,7 +219,7 @@ ggplot(plotdata, aes(x=Jahr,y=Patienten, color=Geschlecht, group=Geschlecht)) +
   scale_color_zi("main") + scale_y_continuous(breaks=seq(0,300,50), 
                                               limits=c(0,300)) 
 
-## ---- fig.height = 4.5, fig.width = 7 , fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
+## ----liniendiagramm_labels, echo=TRUE, message=FALSE, warning=FALSE-----------
 ggplot(plotdata, aes(x=Jahr,y=Patienten,
                      color=Geschlecht, group=Geschlecht, label=Geschlecht)) + 
   geom_line(size=2) +  
@@ -231,7 +240,7 @@ ggplot(plotdata, aes(x=Jahr,y=Patienten,
                   nudge_y = c(0,1),
                   force_pull = 100)
 
-## ---- fig.height = 5.5, fig.width = 7 , fig.align ="left" , echo=TRUE, message=FALSE, warning=FALSE----
+## ----liniendiagramm_facets, echo=TRUE, message=FALSE, warning=FALSE-----------
 plotdata <- Darmkrebsvorsorge_Patienten %>% 
   mutate(Geschlecht=as.character(Geschlecht),
          Alter = as.character(Alter)) %>% 
@@ -250,7 +259,7 @@ ggplot(plotdata, aes(x=Jahr,y=Patienten, color=Geschlecht, group=Geschlecht)) +
        color="") +
   scale_color_zi("main") 
 
-## ---- fig.height = 5, fig.width = 7, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
+## ----plot_kaplanmeier, echo=TRUE, message=FALSE, warning=FALSE----------------
 library(survival)
 # data(ovarian)
 library(survminer)
@@ -265,7 +274,7 @@ ggsp_data <- ggsp$plot$data # we need to extract the data from the ggsurvplot-ob
 ggplot(ggsp_data) + aes(x=time,color=ifelse(strata=="rx=1","Gruppe 1", "Gruppe 2"),y=surv*100) + geom_step(size=2) + scale_color_zi() + theme_zi(font=myfamily) + scale_y_continuous(breaks=seq(0,100,10),limits=c(0,100)) + labs(color="",title="Überlebensanalyse",subtitle="Überlebensrate in % nach Tagen") + theme(legend.position = "bottom" )
 
 
-## ---- fig.height = 4, fig.width = 6, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
+## ----boxplots, echo=TRUE, message=FALSE, warning=FALSE------------------------
 # data(iris)
 library(EnvStats) # to display sample sizes
 ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species, color=Species)) + 
@@ -284,7 +293,7 @@ ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species, color=Species)) +
   stat_n_text(y.expand.factor=0.2, size=3.5, family=myfamily, 
               color = zi_cols("ziblaugruen")) # "#194B5A"
 
-## ---- fig.height = 4, fig.width = 6, echo=TRUE, message=FALSE, warning=FALSE----
+## ----karte, echo=TRUE, message=FALSE, warning=FALSE---------------------------
 library(sf)
 
 KRS <- read_sf("../data/shp/kreise.shp")
@@ -314,7 +323,7 @@ plot_karte_krs_bl <-
 
 plot_karte_krs_bl 
 
-## ---- fig.height = 4, fig.width = 8, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
+## ----plot_dumbbell, echo=TRUE, message=FALSE, warning=FALSE-------------------
 plotdata <- Darmkrebsvorsorge_gesamt %>% 
   filter(Jahr %in% c(min(Jahr),max(Jahr))) %>%
   filter(!is.na(Patienten))
@@ -333,7 +342,7 @@ dumbbell_plot <- ggplot(plotdata) +aes(x=str_trunc(Beschreibung,60),
   coord_flip()
 dumbbell_plot
 
-## ---- fig.height = 4, fig.width = 8, fig.align ="left", echo=TRUE, message=FALSE, warning=FALSE----
+## ----dumbbell_caption, echo=TRUE, message=FALSE, warning=FALSE----------------
 dumbbell_plot_mitcaption <- dumbbell_plot +
   labs(caption="Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.")
 
@@ -344,7 +353,7 @@ ggsave("data/dumbbell.png",
        width=16, height=9,
        units="cm", dpi=300)
 
-## ----echo=TRUE, message=FALSE, warning=FALSE, include=TRUE--------------------
+## ----dumbbell_logolinks, echo=TRUE, message=FALSE, warning=FALSE, include=TRUE----
 library(magick)
 finalise_plot_logolinks(plot_name = dumbbell_plot,
                         source_name = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
@@ -353,7 +362,7 @@ finalise_plot_logolinks(plot_name = dumbbell_plot,
                         save_filepath = "data/dumbbell_logolinks.png"
 )
 
-## ----echo=TRUE, message=FALSE, warning=FALSE, include=TRUE--------------------
+## ----dumbbell_logorechts, echo=TRUE, message=FALSE, warning=FALSE, include=TRUE----
 library(magick)
 finalise_plot_logorechts(plot_name = dumbbell_plot,
                          source_name = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
