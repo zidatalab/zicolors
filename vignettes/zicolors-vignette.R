@@ -374,7 +374,7 @@ finalise_plot_logorechts(plot_name = dumbbell_plot,
                          source_name = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
                          width = 16,
                          height = 9,
-                         hjust_source = 0.2,
+                         hjust_source = 0.85,
                          save_filepath = "data/dumbbell_logorechts.png"
 )
 

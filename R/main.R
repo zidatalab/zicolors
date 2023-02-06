@@ -48,6 +48,11 @@ theme_zi <- function(fontsize=10, font = NULL) {
     
     ## subtitle 
     plot.subtitle = ggplot2::element_text(size=fontsize*1.2),
+    
+    ## position everything to the very left (not above plot area like default)
+    plot.title.position = "plot", # applied to subtitle, too
+    plot.caption.position =  "plot",
+    
     #Legend format
     legend.position = "bottom",
     legend.justification='left',

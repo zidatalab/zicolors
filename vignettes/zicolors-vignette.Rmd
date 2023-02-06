@@ -480,7 +480,7 @@ dumbbell_plot
 
 # Plots mit Quellenangabe
 
-Soll einer Grafik die Quelle/Datengrundlage hinzugefügt werden, kann das direkt in `ggplot2` mit einer `caption` erledigt werden. Die Quelle steht automatisch wie vom Coroporate Design verlangt unten rechts. Diese Form ist die Grundlage für die Grafik des Monats und kann in druckfähiger Auflösung (300 dpi) mit `ggsave()` gespeichert werden, dafür muss allerdings vorher mit `showtext_opts(dpi = 300)` sichergestellt werden, dass die geladene Schriftart richtig in die Grafik integriert wird:
+Soll einer Grafik die Quelle/Datengrundlage hinzugefügt werden, kann das direkt in `ggplot2` mit einer `caption` erledigt werden. Die Quelle steht automatisch wie vom Coroporate Design verlangt unten rechts. Diese Form ist die Grundlage für die Grafik des Monats und kann in druckfähiger Auflösung (300 dpi) mit `ggsave()` gespeichert werden (am besten als EPS-Format), dafür muss allerdings vorher mit `showtext_opts(dpi = 300)` sichergestellt werden, dass die geladene Schriftart richtig in die Grafik integriert wird:
 
 ```{r dumbbell_caption, echo=TRUE, message=FALSE, warning=FALSE}
 dumbbell_plot_mitcaption <- dumbbell_plot +
@@ -527,7 +527,7 @@ finalise_plot_logorechts(plot_name = dumbbell_plot,
                          source_name = "Datenbasis: Vertragsärztliche Abrechnungsdaten 2009-2017.",
                          width = 16,
                          height = 9,
-                         hjust_source = 0.2,
+                         hjust_source = 0.85,
                          save_filepath = "data/dumbbell_logorechts.png"
 )
 ```
