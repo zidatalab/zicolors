@@ -353,6 +353,12 @@ ggsave("data/dumbbell.png",
        width=16, height=9,
        units="cm", dpi=300)
 
+ggsave("data/dumbbell.eps", 
+       plot=dumbbell_plot_mitcaption, 
+       device="eps",
+       width=16, height=9,
+       units="cm", dpi=300)
+
 ## ----dumbbell_logolinks, echo=TRUE, message=FALSE, warning=FALSE, include=TRUE----
 library(magick)
 finalise_plot_logolinks(plot_name = dumbbell_plot,

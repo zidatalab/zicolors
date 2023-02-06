@@ -492,6 +492,12 @@ ggsave("data/dumbbell.png",
        plot=dumbbell_plot_mitcaption, 
        width=16, height=9,
        units="cm", dpi=300)
+
+ggsave("data/dumbbell.eps", 
+       plot=dumbbell_plot_mitcaption, 
+       device="eps",
+       width=16, height=9,
+       units="cm", dpi=300)
 ```
 ![](data/dumbbell.png){width="100%"}
 
