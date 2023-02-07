@@ -480,7 +480,7 @@ dumbbell_plot
 
 # Plots mit Quellenangabe
 
-Soll einer Grafik die Quelle/Datengrundlage hinzugefügt werden, kann das direkt in `ggplot2` mit einer `caption` erledigt werden. Die Quelle steht automatisch wie vom Coroporate Design verlangt unten rechts. Diese Form ist die Grundlage für die Grafik des Monats und kann in druckfähiger Auflösung (300 dpi) mit `ggsave()` gespeichert werden (am besten als EPS-Format), dafür muss allerdings vorher mit `showtext_opts(dpi = 300)` sichergestellt werden, dass die geladene Schriftart richtig in die Grafik integriert wird:
+Soll einer Grafik die Quelle/Datengrundlage hinzugefügt werden, kann das direkt in `ggplot2` mit einer `caption` erledigt werden. Die Quelle steht automatisch wie vom Coroporate Design verlangt unten rechts. Diese Form ist die Grundlage für die Grafik des Monats und kann in druckfähiger Auflösung (300 dpi) mit `ggsave()` gespeichert werden (am besten als SVG-Format), dafür muss allerdings vorher mit `showtext_opts(dpi = 300)` sichergestellt werden, dass die geladene Schriftart richtig in die Grafik integriert wird:
 
 ```{r dumbbell_caption, echo=TRUE, message=FALSE, warning=FALSE}
 dumbbell_plot_mitcaption <- dumbbell_plot +
@@ -493,14 +493,13 @@ ggsave("data/dumbbell.png",
        width=16, height=9,
        units="cm", dpi=300)
 
-ggsave("data/dumbbell.eps", 
+ggsave("data/dumbbell.svg", 
        plot=dumbbell_plot_mitcaption, 
-       device="eps",
+       device="svg",
        width=16, height=9,
        units="cm", dpi=300)
 ```
 ![](data/dumbbell.png){width="100%"}
-
 
 # Plots mit integriertem Zi-Logo
 
@@ -532,3 +531,8 @@ finalise_plot_logorechts(plot_name = dumbbell_plot,
 )
 ```
 ![](data/dumbbell_logorechts.png){width="100%"}
+
+# Plots für die Grafik des Monats
+
+Als Grundlage für die Grafik des Monats dient immer ein Plot im Zi-Corporate Design mit Quellenangabe, aber ohne Zi-Logo (wie `dumbbell_plot_mitcaption` von oben). Der fertige Plot sollte im SVG-Format von einem geeigneten Arbeitsplatz mit einem Grafikprogramm wie beispielsweise InDesign mit der Zi-Trichter-Banderole erweitert werden.
+![](data/GDM_Vorlage.png){width="100%"}
