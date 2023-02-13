@@ -353,9 +353,9 @@ ggsave("data/dumbbell.png",
        width=16, height=9,
        units="cm", dpi=300)
 
-ggsave("data/dumbbell.eps", 
+ggsave("data/dumbbell.svg", 
        plot=dumbbell_plot_mitcaption, 
-       device="eps",
+       device="svg",
        width=16, height=9,
        units="cm", dpi=300)
 
