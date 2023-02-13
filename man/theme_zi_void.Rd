@@ -4,7 +4,7 @@
 \alias{theme_zi_void}
 \title{Zi Theme without axis and labels based on theme_zi() optimal suited to print maps.}
 \usage{
-theme_zi_void(fontsize = 14, font = "Calibri")
+theme_zi_void(fontsize = 10, font = NULL)
 }
 \arguments{
 \item{Define}{a base_size (Defaults to 12) and base_family for Fonts used (defaults to ggplot2's defaults)}
@@ -13,7 +13,10 @@ theme_zi_void(fontsize = 14, font = "Calibri")
 Zi Theme without axis and labels based on theme_zi() optimal suited to print maps.
 }
 \examples{
-ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zi_void()
-
+\dontrun{
+ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
+geom_point() +
+theme_zi_void(font=myfamily)
+}
 }
 \keyword{theme}

@@ -4,7 +4,7 @@
 \alias{theme_zi_horizontal}
 \title{Zi Theme with for horizontal charts}
 \usage{
-theme_zi_horizontal(fontsize = 14, font = "Calibri")
+theme_zi_horizontal(fontsize = 10, font = NULL)
 }
 \arguments{
 \item{Define}{a base_size (Defaults to 12) and base_family for Fonts used (defaults to ggplot2's defaults)}

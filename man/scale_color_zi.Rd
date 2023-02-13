@@ -7,14 +7,14 @@
 scale_color_zi(palette = "main", discrete = TRUE, reverse = FALSE, ...)
 }
 \arguments{
-\item{Options}{include palette (Defaults to "main" zi Blue/Green/Orange, with other options beeing based on mostly 2 colors except of "qualitative" with 4 colors)}
+\item{Options}{include palette (Defaults to "main" zi Blue/Green/Bluegreen, with other options being based on mostly 2 colors except of "qualitative" with 4 colors)}
 }
 \description{
 Zi color scale for ggplot2 with different pallettes
 }
 \examples{
-ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zi() + scale_color_zi()
-
-
+\dontrun{
+ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +   geom_point() +  theme_zi(font=myfamily) + scale_color_zi()
+}
 }
 \keyword{custom_scale_color()}
