@@ -2,7 +2,7 @@
 % Please edit documentation in R/main.R
 \name{scale_color_zi}
 \alias{scale_color_zi}
-\title{Zi color scale for ggplot2 with different pallettes}
+\title{Zi color scale for ggplot2 with different palettes}
 \usage{
 scale_color_zi(palette = "main", discrete = TRUE, reverse = FALSE, ...)
 }
@@ -10,7 +10,7 @@ scale_color_zi(palette = "main", discrete = TRUE, reverse = FALSE, ...)
 \item{Options}{include palette (Defaults to "main" zi Blue/Green/Bluegreen, with other options being based on mostly 2 colors except of "qualitative" with 4 colors)}
 }
 \description{
-Zi color scale for ggplot2 with different pallettes
+Zi color scale for ggplot2 with different palettes
 }
 \examples{
 \dontrun{

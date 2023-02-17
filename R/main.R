@@ -2,14 +2,14 @@
 # Note: This Script is heavily inspired by the BBC Style Guide
 
 zi_colors <- c(
+  `zihimmelblau`          = rgb(60/255,155/255,250/255), # "#3c9bfa"
+  `zilindgruen`           = rgb(45/255,205/255,115/255), # "#2dcd73"
+  `zihimmelblaudunkel`    = rgb(50/255,105/255,200/255), # "#3269c8"
+  `zilindgruendunkel`     = rgb(30/255,145/255,80/255), # "#1e9150"
   `ziblaugruen`           = rgb(25/255,75/255,90/255), # "#194b5a"
   `zihimmelblauhell`      = rgb(190/255,225/255,255/255), # "#bee1ff"
-  `zihimmelblau`          = rgb(60/255,155/255,250/255), # "#3c9bfa"
-  `zihimmelblaudunkel`    = rgb(50/255,105/255,200/255), # "#3269c8"
-  `ziblaugruenhell`       = rgb(65/255,130/255,150/255), # "#418296"
   `zilindgruenhell`       = rgb(190/255,235/255,205/255), # "#beebcd"
-  `zilindgruen`           = rgb(45/255,205/255,115/255), # "#2dcd73"
-  `zilindgruendunkel`     = rgb(30/255,145/255,80/255), # "#1e9150"
+  `ziblaugruenhell`       = rgb(65/255,130/255,150/255), # "#418296"
   `zihoniggelb`           = rgb(255/255,185/255,75/255), # "#ffb94b"
   `zikoralle`             = rgb(240/255,110/255,110/255), # "#f06e6e"
   `zialtlila`             = rgb(90/255, 80/255, 145/255), # "#5a5091"
@@ -198,11 +198,11 @@ zi_cols <- function(...) {
 #' @export
 zi_palettes <- list(
   `main`        = zi_cols("zihimmelblau", "zilindgruen"),
+  `main3colors` = zi_cols("zihimmelblau", "zilindgruen", "zihimmelblaudunkel"),
   `shadesofblue`= zi_cols("zihimmelblauhell", "zihimmelblau", "zihimmelblaudunkel"),
   `shadesofgreen`= zi_cols("zilindgruenhell", "zilindgruen", "zilindgruendunkel"), 
-  `intensity`  = c(zi_cols("zihimmelblau"), "white"),
+  `intensity`  = c("white", zi_cols("zihimmelblau")),
   `divergent`   = c(zi_cols("zihimmelblau"), "white", zi_cols("zilindgruen")),
-  `main4colors` = zi_cols("zihimmelblau", "zilindgruen", "zikoralle", "zihoniggelb"),
   `main5colors` = zi_cols("zihimmelblau", "zilindgruen", "zikoralle", "zihoniggelb", "zialtlila")
 )
 
@@ -215,7 +215,7 @@ zi_pal <- function(palette = "main", reverse = FALSE, ...) {
 }
 
 
-#' Zi color scale for ggplot2 with different pallettes
+#' Zi color scale for ggplot2 with different palettes
 #'
 #' @param Options include palette (Defaults to "main" zi Blue/Green/Bluegreen, with other options being based on mostly 2 colors except of "qualitative" with 4 colors)
 #' @keywords custom_scale_color()
@@ -238,7 +238,7 @@ scale_color_zi <- function(palette = "main", discrete = TRUE, reverse = FALSE, .
 
 #' Zi fill scale for ggplot2 with different palettes
 #'
-#' @param Options include palette (Defaults to "main" zi Blue-Shades, with other options being "all", "qualitative")
+#' @param Options include palette (Defaults to "main")
 #' @keywords custom_scale_color()
 #' @export
 #' @examples

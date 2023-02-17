@@ -25,11 +25,8 @@ library("stringr")
 library("forcats")
 
 ## ----installpackage, echo=TRUE, eval=FALSE------------------------------------
-#  # Installation des Codes von lokal
-#  install_local("G:/93 Repository_Software/R_Packages/r_library_zi/zicolors")
-#  
-#  # Installation des Codes von github
-#  devtools::install_github("zidatalab/zicolors")
+#  ### Installation des Codes von github
+#  # devtools::install_github("zidatalab/zicolors")
 
 ## ----loadzicolors, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE----
 library("zicolors")
@@ -85,8 +82,9 @@ img <- function(obj, nam) {
         main = nam, ylab = "", xaxt = "n", yaxt = "n",  bty = "n")
 }
 
-par(mfrow=c(5, 1), mar=rep(1, 4))
+par(mfrow=c(6, 1), mar=rep(1, 4))
 img(zi_pal("main")(2), "main")
+img(zi_pal("main3colors")(3), "main3colors")
 img(zi_pal("shadesofblue")(n_col), "shadesofblue")
 img(zi_pal("shadesofgreen")(n_col), "shadesofgreen")
 img(zi_pal("intensity")(n_col), "intensity")
@@ -157,10 +155,7 @@ ggplot(beispieldaten_summed,
            y=n,
            fill=G)) + 
   geom_bar(stat="identity", width=0.5, color="white") + 
-  scale_fill_manual(values=unname(c(
-    zi_cols("zihimmelblau"),
-    zi_cols("zilindgruen"),
-    zi_cols(("zihimmelblaudunkel"))))) +
+  scale_fill_zi("main3colors") +
   theme_zi(font=myfamily) +
   labs(fill="", 
        title="Stacked Bar Chart",
@@ -179,10 +174,7 @@ ggplot(beispieldaten_summed_withposition,
            y=n,
            fill=G)) + 
   geom_bar(stat="identity", width=0.4, color="white") + 
-  scale_fill_manual(values=unname(c(
-    zi_cols("zihimmelblau"),
-    zi_cols("zilindgruen"),
-    zi_cols(("zihimmelblaudunkel"))))) +
+  scale_fill_zi("main3colors") +
   theme_zi(font=myfamily) +
   labs(fill="", 
        title="Stacked Bar Chart",
@@ -271,8 +263,20 @@ my_fit <- survfit(my_surv ~ rx, conf.type="log-log", data=ovarian) # create a su
 ggsp <- ggsurvplot(my_fit, censor.shape="I")
 ggsp_data <- ggsp$plot$data # we need to extract the data from the ggsurvplot-object
 
-ggplot(ggsp_data) + aes(x=time,color=ifelse(strata=="rx=1","Gruppe 1", "Gruppe 2"),y=surv*100) + geom_step(size=2) + scale_color_zi() + theme_zi(font=myfamily) + scale_y_continuous(breaks=seq(0,100,10),limits=c(0,100)) + labs(color="",title="Überlebensanalyse",subtitle="Überlebensrate in % nach Tagen") + theme(legend.position = "bottom" )
-
+ggplot(ggsp_data) + 
+  aes(x=time,
+      color=ifelse(strata=="rx=1",
+                   "Gruppe 1",
+                   "Gruppe 2"),
+      y=surv*100) + 
+  geom_step(size=2) + 
+  scale_color_zi() + 
+  theme_zi(font=myfamily) + 
+  scale_y_continuous(breaks=seq(0,100,10),
+                     limits=c(0,100)) + 
+  labs(color="",
+       title="Überlebensanalyse",
+       subtitle="Überlebensrate in % nach Tagen")
 
 ## ----boxplots, echo=TRUE, message=FALSE, warning=FALSE------------------------
 # data(iris)
@@ -280,14 +284,8 @@ library(EnvStats) # to display sample sizes
 ggplot(data=iris, aes(x=Species, y=Sepal.Length, fill=Species, color=Species)) + 
   geom_boxplot(lwd=1, fatten=1.5, alpha=.8, show.legend = FALSE) +
   theme_zi(font=myfamily) + 
-  scale_fill_manual(values=unname(c(
-    zi_cols("zihimmelblau"),
-    zi_cols("zilindgruen"),
-    zi_cols(("zihimmelblaudunkel"))))) +
-  scale_color_manual(values=unname(c(
-    zi_cols("zihimmelblau"),
-    zi_cols("zilindgruen"),
-    zi_cols(("zihimmelblaudunkel"))))) +
+  scale_fill_zi("main3colors") +
+  scale_color_zi("main3colors") +
   labs(title="Iris data: species comparison", subtitle="Sepal length in cm") + 
   ylim(0, NA) +
   stat_n_text(y.expand.factor=0.2, size=3.5, family=myfamily, 

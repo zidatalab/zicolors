@@ -7,7 +7,7 @@
 scale_fill_zi(palette = "main", discrete = TRUE, reverse = FALSE, ...)
 }
 \arguments{
-\item{Options}{include palette (Defaults to "main" zi Blue-Shades, with other options being "all", "qualitative")}
+\item{Options}{include palette (Defaults to "main")}
 }
 \description{
 Zi fill scale for ggplot2 with different palettes
