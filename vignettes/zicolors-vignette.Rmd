@@ -33,7 +33,7 @@ Der Stil orientiert sich an einem vergleichbaren Stil der [BBC](https://bbc.gith
 
 # Installation
 
-Die Installation des Stiles erfolgt anhand eines im Netzwerk bereitgestellten Paketes mit dem Paket `devtools` von R.
+Die Installation des Stiles ist innerhalb des Zi-Netzwerks bereits erfolgt. Auf externen Geräten (Ausnahme!) kann `devtools` benutzt werden, um das Paket direkt von Github zu installieren.
 
 ```{r loadlibraries,echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
 
@@ -49,11 +49,8 @@ library("stringr")
 library("forcats")
 ```
 ```{r installpackage, echo=TRUE, eval=FALSE}
-# Installation des Codes von lokal
-install_local("G:/93 Repository_Software/R_Packages/r_library_zi/zicolors")
-
-# Installation des Codes von github
-devtools::install_github("zidatalab/zicolors")
+### Installation des Codes von github
+# devtools::install_github("zidatalab/zicolors")
 ```
 
 
