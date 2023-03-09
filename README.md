@@ -1,6 +1,6 @@
 # Zi Corporate Theme for Plots and Tables with R
 
-This is nice a theme to simplify the creation of plots and tables with R.
+This is a nice theme to simplify the creation of plots and tables with R.
 
 # Installation
 
