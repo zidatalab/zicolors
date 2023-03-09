@@ -158,7 +158,7 @@ img(zi_pal("divergent")(n_col), "divergent")
 
 ### Gezieltes Anwählen einzelner Farben
 
-Einzelne Farben können mit dem Befehl `zi_cols()` beliebig verwendet werden, z.B. `zi_cols("zihimmelblau")`. Achtung, die im Corporate Design vorgeschlagene Farbe für Hervorhebungen (`zi_cols("zisignalrot")`) ist sehr sparsam einzusetzen und sollte nur für `r kableExtra::text_spec("Texthervorhebungen", color = zi_cols("zisignalrot"))` oder einen einzelnen Datenpunkt benutzt werden. Soll in einer Grafik ein Balken oder eine Linie gegenüber anderen Balken/Linien hervorgehoben werden, sollte die Standardfarbe `zi_cols("zihimmelblau")` im Kontrast zu helleren Farben (z.B. `zi_cols("zihimmelblauhell")` verwendet werden (siehe auch weiter unten).
+Einzelne Farben können mit dem Befehl `zi_cols()` ausgewählt werden, z.B. `zi_cols("zihimmelblau")`. Achtung, die im Corporate Design vorgeschlagene Farbe für Hervorhebungen (`zi_cols("zisignalrot")`) ist sehr sparsam einzusetzen und sollte nur für `r kableExtra::text_spec("Texthervorhebungen", color = zi_cols("zisignalrot"))` oder einen einzelnen Datenpunkt benutzt werden. Soll in einer Grafik ein Balken oder eine Linie gegenüber anderen Balken/Linien hervorgehoben werden, sollte die Standardfarbe `zi_cols("zihimmelblau")` im Kontrast zu helleren Farben (z.B. `zi_cols("zihimmelblauhell")` verwendet werden (siehe auch weiter unten).
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width = 7, fig.height = 7}
 # Create color chart showing rectangle blocks of color, along with
