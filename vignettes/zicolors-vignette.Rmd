@@ -338,7 +338,7 @@ Zusätzlich können die Gesamtzahlen in fett über den Balken erscheinen, sowie 
 ```{r balken_stacked_famos, echo=TRUE, message=FALSE, warning=FALSE}
 beispieldaten_summed_withposition <- beispieldaten_summed %>% 
   group_by(X) %>% 
-  arrange(rev(G), .by_group = TRUE) %>% 
+  arrange(desc(G), .by_group = TRUE) %>% 
   mutate(myposition=cumsum(n)-n/2) %>% 
   ungroup()
 
